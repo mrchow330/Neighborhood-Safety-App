@@ -4,7 +4,7 @@ The neighborhood safety app is a community-driven software solution designed to 
 
 For this project, we are using [Expo](https://docs.expo.dev/) and [React Native](https://reactnative.dev/).
 
-Dependences
+Dependencies
 -----------
 We'll need the following to get started:
 
