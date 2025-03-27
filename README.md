@@ -21,6 +21,6 @@ Set up/Build
     ```
 4. Depending on your machine, this may take a few minutes but you should see something like this:
     ![run expo start](./run%20expo%20start.png)
-5. Once this is loaded, load the app using your preferred method.
+5. Once this is loaded, load the app using your preferred method. To stop the build, hit ````Ctrl + C```` in the terminal.
 
 Happy coding!
