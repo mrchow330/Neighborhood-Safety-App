@@ -11,7 +11,7 @@ We'll need the following to get started:
 * [Expo Go](https://expo.dev/go) installed on a physical device (if you wish to preview the app on mobile)
 * [Node.js](https://nodejs.org/en) (LTS version) installed
 
-Set up/Build
+Set up/View on Local Machine
 -------
 1. Clone this repository.
 2. Navigate to the Neighborhood-Safety-App folder _inside_ the Neighborhood-Safety-App repo in your terminal.
@@ -23,9 +23,41 @@ npx expo start
 ```
 4. Depending on your machine, this may take a few minutes but you should see something like this:
     ![run expo start](./run%20expo%20start.png)
-5. Once this is loaded, load the app using your preferred method. To stop the build, hit ````Ctrl + C```` in the terminal.
+5. Once this is loaded, load the app using your preferred method (QR code, web, etc). To stop the build, hit ````Ctrl + C```` in the terminal.
 
 Happy coding!
+
+Builds
+--------
+The app is available as a web version using Vercel and is automatically deployed whenever there are new commits. 
+
+See live web version here ➡️ [https://neighborhood-safety-app.vercel.app/](https://neighborhood-safety-app.vercel.app/)
+
+For developers, the latest Android builds can be accessed on the Expo Dashboard for the Expo Organization. 
+
+To build yourself, you must be a member of the organization and have an account set up.
+
+Follow the instuctions below:
+
+1. Install EAS CLI if you haven't already
+```bash
+npm install -g eas-cli
+```
+2. Install Expo CLI
+```bash
+npm install -g expo-cli
+```
+3. Run the login command and follow the prompts to log in
+```bash
+eas login
+```
+4. To start the Android build run
+```bash
+eas build --platform android
+```
+Once the build has started, you'll see progress in your terminal. Additionally, you can monitor the build status and logs from the EAS Build Dashboard through your account.
+
+When the build is completed, you will get a link to download the APK or AAB file.
 
 Adding new pages
 -------------
