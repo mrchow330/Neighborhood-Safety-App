@@ -40,6 +40,8 @@ See live web version here ➡️ [https://neighborhood-safety-app.vercel.app/](h
 
 For developers, the latest Android builds can be accessed on the Expo Dashboard for the Expo Organization. 
 
+For more info on whether to build or just use Expo Go, see [this article](https://expo.dev/blog/expo-go-vs-development-builds).
+
 To build yourself, you must be a member of the organization and have an account set up.
 
 Follow the instuctions below:
