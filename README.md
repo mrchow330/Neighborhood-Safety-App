@@ -1,12 +1,9 @@
 # Neighborhood-Safety-App
 The neighborhood safety app is a community-driven software solution designed to enhance public safety and infrastructure management by providing residents with a platform to report and track local safety issues.
 
-
-For this project, we are using [Expo](https://docs.expo.dev/) and [React Native](https://reactnative.dev/).
-
 Dependencies
 -----------
-This app uses Expo, Expo GO, EAS Build, React Native, TypeScript, and Vercel.
+This app uses [Expo](https://docs.expo.dev/), Expo GO, EAS Build, [React Native](https://reactnative.dev/), TypeScript, and Vercel.
 
 It will also use Python, FastAPI, MySQL/MongoDB, and Google Maps API.
 
