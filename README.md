@@ -6,13 +6,18 @@ For this project, we are using [Expo](https://docs.expo.dev/) and [React Native]
 
 Dependencies
 -----------
-We'll need the following to get started:
+This app uses Expo, Expo GO, EAS Build, React Native, TypeScript, and Vercel.
 
-* [Expo Go](https://expo.dev/go) installed on a physical device (if you wish to preview the app on mobile)
-* [Node.js](https://nodejs.org/en) (LTS version) installed
+It will also use Python, FastAPI, MySQL/MongoDB, and Google Maps API.
+
 
 Set up/View on Local Machine
 -------
+We'll need the following to get started:
+* [Expo Go](https://expo.dev/go) installed on a physical device (if you wish to preview the app on mobile)
+* [Node.js](https://nodejs.org/en) (LTS version) installed
+
+Steps:
 1. Clone this repository.
 2. Navigate to the Neighborhood-Safety-App folder _inside_ the Neighborhood-Safety-App repo in your terminal.
 3. In your terminal, run the following:
@@ -70,3 +75,11 @@ npx expo install expo-router react-native-safe-area-context react-native-screens
 * **Add page to navigation:** add another screen within the Tabs component in *(tabs)/_layout.tsx*
 
 For more detailed instructions see official documentation: [Add Navigation](https://docs.expo.dev/tutorial/add-navigation/).
+
+
+More Useful Documentation
+---------
+* [Using Android Studio Emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+* [Publishing websites](https://docs.expo.dev/guides/publishing-websites/)
+* [React fundamentals](https://reactnative.dev/docs/intro-react)
+* [Expo Tutorial](https://docs.expo.dev/tutorial/introduction/)
