@@ -8,7 +8,7 @@ Dependences
 -----------
 We'll need the following to get started:
 
-* [Expo Go](https://expo.dev/go) installed on a physical device
+* [Expo Go](https://expo.dev/go) installed on a physical device (if you wish to preview the app on mobile)
 * [Node.js](https://nodejs.org/en) (LTS version) installed
 
 Set up/Build
