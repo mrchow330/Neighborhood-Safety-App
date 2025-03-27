@@ -14,8 +14,8 @@ We'll need the following to get started:
 Set up/Build
 -------
 1. Clone this repository.
-2. Navigate to the Neighborhood-Safety-App folder.
-3. In your Run the following:
+2. Navigate to the Neighborhood-Safety-App folder in your terminal.
+3. In your terminal, run the following:
     ```
     npx expo start
     ```
