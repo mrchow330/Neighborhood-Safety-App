@@ -24,3 +24,15 @@ Set up/Build
 5. Once this is loaded, load the app using your preferred method. To stop the build, hit ````Ctrl + C```` in the terminal.
 
 Happy coding!
+
+Adding new pages
+-------------
+First, ensure that you have run the following commands in  your terminal:
+```
+npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar
+```
+* **To add a new page:** add a file to the app directory. e.g app/newpage.tsx
+* **Add page to navigation:** update the Stack component in the *_layout.tsx* file
+* **Update tabs:** navigate to the *tabs* subdirectory in the *app* directory and modify as needed.
+
+For more detailed instructions see official documentation: [Add Navigation](https://docs.expo.dev/tutorial/add-navigation/).
