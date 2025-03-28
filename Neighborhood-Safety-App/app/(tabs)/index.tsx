@@ -1,10 +1,14 @@
 import { Text, View, StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
-import { Link } from 'expo-router'; 
+// import { Link } from 'expo-router'; 
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
+import { Image } from 'expo-image';
 
 export default function Index() {
+  const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
   const [fontsLoaded] = useFonts({
     Nunito_400Regular,
     Nunito_700Bold,
@@ -15,7 +19,13 @@ export default function Index() {
   }
   return (
     <View style={styles.container}>
-      
+      <Image
+        style={styles.image}
+        source={require('../../assets/images/temp-logo.png')}
+        placeholder={{ blurhash }}
+        contentFit="cover"
+        transition={1000}
+      />
       {/* <View style={styles.buttonContainer}>
         <Button
           title="Press me"
@@ -23,8 +33,8 @@ export default function Index() {
           onPress={() => Alert.alert('default button')}
         />
       </View> */}
-
-      <SafeAreaProvider>
+      
+      {/* <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <TouchableOpacity style={styles.buttonContainer} onPress={() => Alert.alert('default button')}>
           <Text style = {styles.buttonText}>View Live Map</Text>
@@ -33,7 +43,7 @@ export default function Index() {
           <Text style={styles.buttonText}>Submit a Report</Text>
         </TouchableOpacity>
       </SafeAreaView>
-    </SafeAreaProvider>
+    </SafeAreaProvider> */}
       
     </View>
   );
@@ -45,6 +55,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'column'
   },
   text: {
     color: '#1E293B',
@@ -67,5 +78,10 @@ const styles = StyleSheet.create({
   buttonText:{
     fontSize: 18,
     fontFamily: 'Nunito_400Regular'
+  },
+  image:{
+    width: 200, // Set a fixed width
+    height: 200, // Set a fixed height
+    resizeMode: 'contain', 
   }
 });
