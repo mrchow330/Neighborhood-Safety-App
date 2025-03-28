@@ -1,8 +1,18 @@
 import { Text, View, StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router'; 
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import { useFonts } from 'expo-font';
+import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
 
 export default function Index() {
+  const [fontsLoaded] = useFonts({
+    Nunito_400Regular,
+    Nunito_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return <Text>Loading...</Text>; // Show a loading state while fonts load
+  }
   return (
     <View style={styles.container}>
       
@@ -37,7 +47,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    color: '#fff',
+    color: '#1E293B',
+    fontFamily: 'Nunito_400Regular'
   },
   buttonContainer: {
     backgroundColor: '#6bcfd6',
@@ -55,5 +66,6 @@ const styles = StyleSheet.create({
   },
   buttonText:{
     fontSize: 18,
+    fontFamily: 'Nunito_400Regular'
   }
 });
