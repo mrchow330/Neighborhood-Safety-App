@@ -28,6 +28,8 @@ export default function Index() {
         transition={1000}
       />
 
+      <Text style={styles.header}>Welcome to {"\n"} (insert app name)</Text>
+
       <View >
         <Button label="Report an issue"/>
         <Button label="My Reports" />
@@ -50,6 +52,13 @@ const styles = StyleSheet.create({
   text: {
     color: '#1E293B',
     fontFamily: 'Nunito_400Regular'
+  },
+  header:{
+    fontSize: 30,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#1e3a8a',
+    fontWeight: 'bold',
   },
   image:{
     width: 200, // Set a fixed width
