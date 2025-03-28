@@ -15,6 +15,8 @@ We'll need the following to get started:
 * [Node.js](https://nodejs.org/en) (LTS version) installed
 
 Steps:
+
+Note: the instructions after this point are written for Powershell and WSL2 users.
 1. Clone this repository.
 2. Navigate to the Neighborhood-Safety-App folder _inside_ the Neighborhood-Safety-App repo in your terminal.
 3. In your terminal, run the following:
