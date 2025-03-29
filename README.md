@@ -65,22 +65,10 @@ Once the build has started, you'll see progress in your terminal. Additionally, 
 
 When the build is completed, you will get a link to download the APK or AAB file.
 
-Adding new pages
--------------
-First, ensure that you have run the following commands in  your terminal:
-
-```bash
-npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar
-```
-* **To add a new page:** Navigate to the *(tabs)* subdirectory in the *app* directory. Add your new file, using the *.tsx* file extension.
-* **Add page to navigation:** add another screen within the Tabs component in *(tabs)/_layout.tsx*
-
-For more detailed instructions see official documentation: [Add Navigation](https://docs.expo.dev/tutorial/add-navigation/).
-
-
 More Useful Documentation
 ---------
 * [Using Android Studio Emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 * [Publishing websites](https://docs.expo.dev/guides/publishing-websites/)
 * [React fundamentals](https://reactnative.dev/docs/intro-react)
 * [Expo Tutorial](https://docs.expo.dev/tutorial/introduction/)
+* [Add new pages/ add Navigation](https://docs.expo.dev/tutorial/add-navigation/).
