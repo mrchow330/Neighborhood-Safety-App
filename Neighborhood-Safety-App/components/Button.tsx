@@ -1,13 +1,22 @@
+import React from 'react';
 import { StyleSheet, View, Pressable, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';  
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';  // For proper typing
+import { RootStackParamList } from '../app/_layout'; 
 
 type Props = {
   label: string;
+  targetScreen: keyof RootStackParamList;  // Ensure the targetScreen is typed
 };
 
-export default function Button({ label }: Props) {
+
+export default function Button({ label, targetScreen}: Props) {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return (
     <View style={styles.buttonContainer}>
-      <Pressable style={styles.button} onPress={() => alert('You pressed a button.')}>
+      <Pressable style={styles.button} onPress=
+      {() => navigation.navigate(targetScreen)}>
         <Text style={styles.buttonLabel}>{label}</Text>
       </Pressable>
     </View>
