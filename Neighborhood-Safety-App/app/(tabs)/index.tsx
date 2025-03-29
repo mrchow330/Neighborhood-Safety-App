@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-// import { Link } from 'expo-router'; 
+import { Link } from 'expo-router'; 
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
@@ -29,11 +29,11 @@ export default function Index() {
       />
 
       <Text style={styles.header}>Welcome to {"\n"} (insert app name)</Text>
-
+      {/* <Link href='/about'>about</Link> */}
       <View >
-        <Button label="Report an issue"/>
-        <Button label="My Reports" />
-        <Button label="View Live Map" />
+        <Button label="Report an issue" targetScreen="reportIssue"/>
+        <Button label="My Reports" targetScreen="reports"/>
+        <Button label="View Live Map" targetScreen="map"/>
       </View>
       
       

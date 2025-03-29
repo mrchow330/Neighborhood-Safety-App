@@ -1,9 +1,9 @@
 import { Text, View, StyleSheet } from 'react-native';
 
-export default function AccountScreen() {
+export default function ReportIssue() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Accounts</Text>
+      <Text style={styles.text}>Report Issue form</Text>
     </View>
   );
 }
