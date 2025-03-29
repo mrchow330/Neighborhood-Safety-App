@@ -23,7 +23,7 @@ export default function Index() {
       <Image
         style={styles.image}
         source={require('../../assets/images/temp-logo.png')}
-        placeholder={{ blurhash }}
+        // placeholder={{ blurhash }}
         contentFit="cover"
         transition={1000}
       />
