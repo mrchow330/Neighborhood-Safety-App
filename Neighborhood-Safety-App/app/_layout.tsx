@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import TabLayout from './(homepage tabs)/_layout';
+import TabLayout from './(tabs)/_layout';
 
 export default function RootLayout() {
 
