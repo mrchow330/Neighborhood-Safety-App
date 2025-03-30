@@ -28,7 +28,6 @@ export default function Index() {
         transition={1000}
       />
 
-
       <Text style={styles.header}>Welcome to {"\n"} How's My Hood (name WIP)</Text>
       {/* <Link href='/about'>about</Link> */}
       <View >
