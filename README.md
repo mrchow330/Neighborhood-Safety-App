@@ -6,7 +6,7 @@ Dependencies
 -----------
 This app uses [Expo](https://docs.expo.dev/), Expo GO, EAS Build, [React Native](https://reactnative.dev/), TypeScript, and Vercel.
 
-It will also use Python, FastAPI, MySQL/MongoDB, and Google Maps API.
+It will also use Python, FastAPI, MongoDB, and Google Maps API.
 
 
 Set up/View on Local Machine
