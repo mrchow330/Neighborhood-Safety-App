@@ -9,7 +9,7 @@ export default function DrawerLayout() {
       />
       <Drawer.Screen 
         name="communityGuidelines" 
-        options={{ title: "Community Guidelines" }} 
+        options={{ title: "", drawerLabel: "Community Guidelines" }} 
       />
       <Drawer.Screen 
         name="contactUs" 
