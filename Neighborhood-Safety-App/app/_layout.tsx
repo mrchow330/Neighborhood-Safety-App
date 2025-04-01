@@ -1,21 +1,47 @@
-import { Stack } from 'expo-router';
-import TabLayout from './(tabs)/_layout';
+import { Stack } from "expo-router";
 
 export default function RootLayout() {
-
   return (
-    <Stack
-      screenOptions={{
-        // headerShown: false, // Hides the title at the top
-    }}
-    >
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="+not-found" />
-      <Stack.Screen name="about" options={{title:'About'}}/>
-      <Stack.Screen name="reportIssue" options={{title: 'Report Issue', }}/>
+    <Stack>
+      {/* Main drawer layout is the default */}
+      <Stack.Screen 
+        name="(drawer)" 
+        options={{ headerShown: false }} 
+      />
+
+      {/* Report Issue is pushed on top of the drawer */}
+      <Stack.Screen 
+        name="reportIssue" 
+        options={{ title: "Report Issue" }} 
+      />
     </Stack>
   );
 }
+
+
+// import { Drawer } from 'expo-router/drawer';
+// import { Stack } from 'expo-router'; 
+// import TabLayout from './(drawer)/(tabs)/_layout'; 
+
+// export default function Layout() {
+//   return (
+//     <Stack>
+//       {/* Stack screen for Report Issue */}
+//       <Stack.Screen
+//         name="reportIssue"
+//         options={{ title: 'Report Issue' }}
+//       />
+
+//       {/* Default drawer screen */}
+//       <Drawer>
+//         <Drawer.Screen name="tabs" options={{ headerShown: true, title:'' }} />
+//         <Drawer.Screen name="about" options={{ title: "About" }} />
+//         <Drawer.Screen name="account" options={{ title: "Account" }} />
+//       </Drawer>
+//     </Stack>
+//   );
+// }
+
 
 export type RootStackParamList = {
   "(tabs)": undefined;  // This screen has no parameters
@@ -26,4 +52,5 @@ export type RootStackParamList = {
   map: undefined;  
   reports: undefined;  
   account: undefined;  
+  communityGuidlines : undefined;
 };
