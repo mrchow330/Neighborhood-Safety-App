@@ -6,7 +6,7 @@ export default function RootLayout() {
       {/* Main drawer layout is the default */}
       <Stack.Screen 
         name="(drawer)" 
-        options={{ headerShown: false }} 
+        options={{ headerShown: false, title:"" }} 
       />
 
       {/* Report Issue is pushed on top of the drawer */}

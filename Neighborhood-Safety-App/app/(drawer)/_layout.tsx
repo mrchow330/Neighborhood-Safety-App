@@ -11,10 +11,14 @@ export default function DrawerLayout() {
         name="communityGuidelines" 
         options={{ title: "Community Guidelines" }} 
       />
+      <Drawer.Screen 
+        name="contactUs" 
+        options={{ title: "", drawerLabel: "Contact Us" }} 
+      />
       {/* Drawer-only pages */}
       <Drawer.Screen 
         name="about" 
-        options={{ title: "", drawerLabel:"About" }} 
+        options={{ title: "", drawerLabel:"About Us" }} 
       />
       
       {/* The (tabs) folder holds the tabs navigator */}
@@ -22,6 +26,10 @@ export default function DrawerLayout() {
         name="(tabs)" 
         options={{ headerShown: true, title: "", drawerLabel:"Home" }} 
       />
+      {/* <Drawer.Screen 
+        name="home" 
+        options={{ headerShown: true, title: "", drawerLabel:"Home" }} 
+      /> */}
     </Drawer>
   );
 }
