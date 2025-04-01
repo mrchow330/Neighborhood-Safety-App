@@ -16,6 +16,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Define a schema for reports
 const reportSchema = new mongoose.Schema({
+  report_id: { type: String, required: true }, // Add the unique report ID
   issueType: String,
   location: String,
   description: String,
