@@ -3,7 +3,7 @@ The neighborhood safety app is a community-driven software solution designed to 
 See live web version here ➡️ [https://neighborhood-safety-app.vercel.app/](https://neighborhood-safety-app.vercel.app/)
 
 ## Dependencies
------------
+
 This app uses the following technologies and libraries:
 
 - [Expo](https://docs.expo.dev/) (for building and running the app)
@@ -23,9 +23,10 @@ It will also use Python, FastAPI, MySQL/MongoDB, and Google Maps API.
 
 
 ## Set up/View on Local Machine
--------
+
 To set up and view the app on your local machine, follow these steps:
 ### Prerequisites
+
 - Install [Node.js](https://nodejs.org/en) (LTS version recommended).
 - Install [Expo Go](https://expo.dev/go) on a physical device (if you wish to preview the app on mobile).
 - Install [MongoDB](https://www.mongodb.com/) and ensure it is running locally or use a cloud-hosted MongoDB instance.
@@ -72,7 +73,7 @@ To set up and view the app on your local machine, follow these steps:
 
 
 ## Builds
---------
+
 The app is available as a web version using Vercel and is automatically deployed whenever there are new commits. 
 
 See live web version here ➡️ [https://neighborhood-safety-app.vercel.app/](https://neighborhood-safety-app.vercel.app/)
@@ -106,7 +107,7 @@ Once the build has started, you'll see progress in your terminal. Additionally, 
 When the build is completed, you will get a link to download the APK or AAB file.
 
 ## More Useful Documentation
----------
+
 - [Using Android Studio Emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [Publishing websites](https://docs.expo.dev/guides/publishing-websites/)
 - [React fundamentals](https://reactnative.dev/docs/intro-react)
