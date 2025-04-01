@@ -20,9 +20,9 @@ export default function TabLayout() {
       <Tabs.Screen name="reports" options={{title: 'Reports', tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? "alert-circle-sharp" : "alert-circle-outline"} size={24} color={color} />
           ),}}/>
-      <Tabs.Screen name="account" options={{title: 'Account', tabBarIcon: ({ color, focused }) => (
+      {/* <Tabs.Screen name="account" options={{title: 'Account', tabBarIcon: ({ color, focused }) => (
             <MaterialCommunityIcons name={focused ? "account-circle" : "account-circle-outline"} size={24} color={color} />
-          ),}}/>
+          ),}}/> */}
     </Tabs>
   );
 }
