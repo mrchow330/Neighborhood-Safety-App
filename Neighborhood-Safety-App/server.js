@@ -8,7 +8,7 @@ const cors = require('cors');
 const app = express();
 app.use(bodyParser.json());
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://neighborhood-safety-app-nine.vercel.app'], // Replace with your frontend domains
+  origin: ['http://localhost:3000', 'https://neighborhood-safety-app-nine.vercel.app','https://neighborhood-safety-app-nine.vercel.app/api/reports'], // Replace with your frontend domains
 }));
 
 // Connect to MongoDB
