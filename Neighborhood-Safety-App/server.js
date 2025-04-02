@@ -12,7 +12,11 @@ app.use(cors({
 }));
 
 // Connect to MongoDB
+<<<<<<< Updated upstream
 const mongoURI = process.env.MONGO_URI; // Use environment variable
+=======
+const mongoURI = 'mongodb+srv://echow:Needajob25now@neighborhoodsafetyclust.qf7sruq.mongodb.net/?retryWrites=true&w=majority&appName=NeighborhoodSafetyCluster';
+>>>>>>> Stashed changes
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB connection error:', err));
@@ -28,7 +32,7 @@ const reportSchema = new mongoose.Schema({
 });
 
 // Create a model for reports (explicitly set collection name to "Reports")
-const Report = mongoose.model('Report', reportSchema, 'Reports');
+const Report = mongoose.model('Report', reportSchema, 'reports');
 
 // API endpoint to submit a report
 app.post('/api/reports', async (req, res) => {
