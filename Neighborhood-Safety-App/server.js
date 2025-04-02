@@ -12,11 +12,7 @@ app.use(cors({
 }));
 
 // Connect to MongoDB
-<<<<<<< Updated upstream
 const mongoURI = process.env.MONGO_URI; // Use environment variable
-=======
-const mongoURI = 'mongodb+srv://echow:Needajob25now@neighborhoodsafetyclust.qf7sruq.mongodb.net/?retryWrites=true&w=majority&appName=NeighborhoodSafetyCluster';
->>>>>>> Stashed changes
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB connection error:', err));
