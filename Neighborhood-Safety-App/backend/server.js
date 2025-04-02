@@ -1,19 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
-app.use(bodyParser.json());
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://neighborhood-safety-app-nine.vercel.app'],
-}));
+app.use(express.json());
+app.use(cors());
 
-const mongoURI = process.env.MONGO_URI;
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
+// Define the Report Schema
 const reportSchema = new mongoose.Schema({
   report_id: { type: String, required: true },
   issueType: String,
@@ -22,9 +22,9 @@ const reportSchema = new mongoose.Schema({
   photoUri: String,
   createdAt: { type: Date, default: Date.now },
 });
-
 const Report = mongoose.model('Report', reportSchema, 'reports');
 
+// API Route to Submit Reports
 app.post('/api/reports', async (req, res) => {
   try {
     const report = new Report(req.body);
@@ -35,4 +35,5 @@ app.post('/api/reports', async (req, res) => {
   }
 });
 
+// Export for Vercel
 module.exports = app;
