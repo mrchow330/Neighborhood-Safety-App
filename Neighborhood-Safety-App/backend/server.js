@@ -22,7 +22,12 @@ const reportSchema = new mongoose.Schema({
   photoUri: String,
   createdAt: { type: Date, default: Date.now },
 });
+
 const Report = mongoose.model('Report', reportSchema, 'reports');
+
+app.get('/', (req, res) => {
+  res.send('Welcome to the Neighborhood Safety API!');
+});
 
 // API Route to Submit Reports
 app.post('/api/reports', async (req, res) => {
