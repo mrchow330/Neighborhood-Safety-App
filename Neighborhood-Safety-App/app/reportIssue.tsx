@@ -216,7 +216,7 @@ export default function ReportScreen() {
         photoUri, // This will contain the Cloudinary URL of the uploaded image
       };
   
-      const response = await axios.post('https://neighborhood-safety-app-nine.vercel.app/api/reports', reportData);
+      const response = await axios.post('https://neighborhood-safety-backend.vercel.app/api/reports', reportData);
   
       alert('Report submitted successfully!');
       console.log(response.data);
