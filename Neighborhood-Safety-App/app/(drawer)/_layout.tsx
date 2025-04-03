@@ -3,6 +3,11 @@ import { Drawer } from "expo-router/drawer";
 export default function DrawerLayout() {
   return (
     <Drawer>
+      
+      <Drawer.Screen 
+        name="(tabs)" 
+        options={{ headerShown: true, title: "", drawerLabel:"Home" }} 
+      />
       <Drawer.Screen 
         name="account" 
         options={{ title: "", drawerLabel: "Account" }} 
@@ -22,10 +27,6 @@ export default function DrawerLayout() {
       />
       
       {/* The (tabs) folder holds the tabs navigator */}
-      <Drawer.Screen 
-        name="(tabs)" 
-        options={{ headerShown: true, title: "", drawerLabel:"Home" }} 
-      />
       {/* <Drawer.Screen 
         name="home" 
         options={{ headerShown: true, title: "", drawerLabel:"Home" }} 
