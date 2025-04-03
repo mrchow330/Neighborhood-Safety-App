@@ -3,6 +3,9 @@ import { Text, View, StyleSheet, TextInput, Button, Image, Modal, TouchableOpaci
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
+import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 
 // Define styles at the top
 const styles = StyleSheet.create({
@@ -126,6 +129,8 @@ export default function ReportScreen() {
   const [photo, setPhoto] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const router = useRouter(); // Use useRouter at the top level
+
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
@@ -152,30 +157,24 @@ export default function ReportScreen() {
     setIsModalVisible(false);
   };
 
-  const uploadToCloudinary = async (uri) => {
+  const uploadToCloudinary = async (uri, reportId) => {
     try {
-      console.log('Starting image upload to Cloudinary...');
-      console.log('Image URI:', uri);
-  
-      // Check if the URI is base64-encoded
       const isBase64 = uri.startsWith('data:image');
       const data = new FormData();
   
       if (isBase64) {
-        // If the URI is base64, pass it directly
-        data.append('file', uri); // Base64 string
+        data.append('file', uri);
       } else {
-        // If the URI is a file path, pass it as a file object
         data.append('file', {
           uri,
           type: 'image/jpeg',
-          name: `image_${Date.now()}.jpg`,
+          name: `${reportId}.jpg`, // Use the report ID as the file name
         });
       }
   
-      data.append('upload_preset', 'neighborhood_safety_app'); // Replace with your upload preset
-  
-      console.log('FormData prepared:', data);
+      // Add the public_id parameter to set the image name in Cloudinary
+      data.append('public_id', `report_${reportId}`); // Use the report ID as the public ID
+      data.append('upload_preset', 'neighborhood_safety_app');
   
       const response = await fetch('https://api.cloudinary.com/v1_1/drpqpcyij/image/upload', {
         method: 'POST',
@@ -183,13 +182,12 @@ export default function ReportScreen() {
       });
   
       const result = await response.json();
-      console.log('Cloudinary JSON response:', result);
   
       if (!result.secure_url) {
         throw new Error('Failed to upload image to Cloudinary');
       }
   
-      return result.secure_url; // This is the public URL of the image
+      return result.secure_url; // Return the URL of the uploaded image
     } catch (error) {
       console.error('Error uploading to Cloudinary:', error);
       throw error;
@@ -198,25 +196,27 @@ export default function ReportScreen() {
 
   const handleSubmit = async () => {
     try {
+      const reportId = uuidv4(); // Generate a unique ID for the report
       let photoUri = null;
   
       if (photo) {
         try {
-          photoUri = await uploadToCloudinary(photo); // Upload the image and get the URL
+          photoUri = await uploadToCloudinary(photo, reportId); // Pass the report ID to Cloudinary
         } catch (error) {
           alert('Failed to upload the image. Please try again.');
-          return; // Stop submission if the upload fails
+          return;
         }
       }
   
       const reportData = {
+        report_id: reportId, // Include the unique report ID in the report data
         issueType: selectedIssue,
         location,
         description,
-        photoUri, // Use the public URL
+        photoUri, // This will contain the Cloudinary URL of the uploaded image
       };
   
-      const response = await axios.post('http://localhost:5000/api/reports', reportData);
+      const response = await axios.post('https://neighborhood-safety-backend.vercel.app/api/reports', reportData);
   
       alert('Report submitted successfully!');
       console.log(response.data);
@@ -226,11 +226,18 @@ export default function ReportScreen() {
       setLocation('');
       setDescription('');
       setPhoto(null);
+  
+      // Close the modal
+      handleCloseModal();
+  
+      // Redirect to the homepage
+      router.push('/');
     } catch (error) {
       console.error('Error submitting report:', error);
       alert('Failed to submit the report. Please try again.');
     }
   };
+
 
   return (
     <View style={styles.container}>

@@ -2,38 +2,78 @@
 The neighborhood safety app is a community-driven software solution designed to enhance public safety and infrastructure management by providing residents with a platform to report and track local safety issues.
 See live web version here ➡️ [https://neighborhood-safety-app.vercel.app/](https://neighborhood-safety-app.vercel.app/)
 
-Dependencies
------------
-This app uses [Expo](https://docs.expo.dev/), Expo GO, EAS Build, [React Native](https://reactnative.dev/), TypeScript, and Vercel.
+## Dependencies
+
+This app uses the following technologies and libraries:
+
+- [Expo](https://docs.expo.dev/) (for building and running the app)
+- [React Native](https://reactnative.dev/) (for mobile app development)
+- [TypeScript](https://www.typescriptlang.org/) (for type-safe development)
+- [Vercel](https://vercel.com/) (for web hosting)
+- [MongoDB](https://www.mongodb.com/) (for database management)
+- [Cloudinary](https://cloudinary.com/) (for image hosting and management)
+- [uuid](https://www.npmjs.com/package/uuid) (for generating unique IDs)
+- [Axios](https://axios-http.com/) (for making HTTP requests)
+- [Expo Image Picker](https://docs.expo.dev/versions/latest/sdk/imagepicker/) (for selecting images)
+- [EAS Build](https://docs.expo.dev/build/introduction/) (for building the app)
+- [React Navigation](https://reactnavigation.org/) (for navigation)
+- [Expo Router](https://expo.github.io/router/docs) (for file-based routing)
 
 It will also use Python, FastAPI, MongoDB, and Google Maps API.
 
 
-Set up/View on Local Machine
--------
-We'll need the following to get started:
-* [Expo Go](https://expo.dev/go) installed on a physical device (if you wish to preview the app on mobile)
-* [Node.js](https://nodejs.org/en) (LTS version) installed
+## Set up/View on Local Machine
 
-Steps:
+To set up and view the app on your local machine, follow these steps:
+### Prerequisites
 
-Note: the instructions after this point are written for Powershell and WSL2 users.
-1. Clone this repository.
-2. Navigate to the Neighborhood-Safety-App folder _inside_ the Neighborhood-Safety-App repo in your terminal.
-3. In your terminal, run the following:
+- Install [Node.js](https://nodejs.org/en) (LTS version recommended).
+- Install [Expo Go](https://expo.dev/go) on a physical device (if you wish to preview the app on mobile).
+- Install [MongoDB](https://www.mongodb.com/) and ensure it is running locally or use a cloud-hosted MongoDB instance.
+- Create a [Cloudinary](https://cloudinary.com/) account and set up an upload preset.
 
-```bash
-npx expo start
+### Steps:
 
-```
-4. Depending on your machine, this may take a few minutes but you should see something like this:
-    ![run expo start](./run%20expo%20start.png)
-5. Once this is loaded, load the app using your preferred method (QR code, web, etc). To stop the build, hit ````Ctrl + C```` in the terminal.
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/your-username/Neighborhood-Safety-App.git
+   ```
 
-Happy coding!
+2. Navigate to the project directory:
+   ```bash
+   cd Neighborhood-Safety-App
+   ```
 
-Builds
---------
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+4. Set up environment variables:
+   - Create a `.env` file in the root of the project.
+   - Add the following variables:
+     ```
+     MONGO_URI=your-mongodb-connection-string
+     CLOUDINARY_URL=your-cloudinary-upload-url
+     ```
+
+5. Start the backend server:
+   ```bash
+   node server.js
+   ```
+
+6. Start the Expo development server:
+   ```bash
+   npx expo start
+   ```
+
+7. Open the app:
+   - Scan the QR code in the terminal using the Expo Go app on your mobile device.
+   - Alternatively, open the app in a web browser or an emulator.
+
+
+## Builds
+
 The app is available as a web version using Vercel and is automatically deployed whenever there are new commits. 
 
 See live web version here ➡️ [https://neighborhood-safety-app.vercel.app/](https://neighborhood-safety-app.vercel.app/)
@@ -66,10 +106,17 @@ Once the build has started, you'll see progress in your terminal. Additionally, 
 
 When the build is completed, you will get a link to download the APK or AAB file.
 
-More Useful Documentation
----------
-* [Using Android Studio Emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-* [Publishing websites](https://docs.expo.dev/guides/publishing-websites/)
-* [React fundamentals](https://reactnative.dev/docs/intro-react)
-* [Expo Tutorial](https://docs.expo.dev/tutorial/introduction/)
-* [Add new pages/ add Navigation](https://docs.expo.dev/tutorial/add-navigation/).
+## More Useful Documentation
+
+- [Using Android Studio Emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+- [Publishing websites](https://docs.expo.dev/guides/publishing-websites/)
+- [React fundamentals](https://reactnative.dev/docs/intro-react)
+- [Expo Tutorial](https://docs.expo.dev/tutorial/introduction/)
+- [Add new pages/ add Navigation](https://docs.expo.dev/tutorial/add-navigation/)
+- [Cloudinary Documentation](https://cloudinary.com/documentation)
+- [MongoDB Documentation](https://www.mongodb.com/docs/)
+- [Axios Documentation](https://axios-http.com/docs/intro)
+
+---
+
+Happy coding!

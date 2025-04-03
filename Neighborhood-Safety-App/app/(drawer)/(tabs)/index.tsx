@@ -22,13 +22,13 @@ export default function Index() {
     <View style={styles.container}>
       <Image
         style={styles.image}
-        source={require('../../assets/images/temp-logo.png')}
+        source={require('../../../assets/images/temp-logo.png')}
         // placeholder={{ blurhash }}
         contentFit="cover"
         transition={1000}
       />
 
-      <Text style={styles.header}>Welcome to {"\n"} How's My Hood (name WIP)</Text>
+      <Text style={styles.header}>Welcome to {"\n"} HoodWatch (name WIP)</Text>
       {/* <Link href='/about'>about</Link> */}
       <View >
         <Button label="Report an issue" targetScreen="reportIssue"/>
