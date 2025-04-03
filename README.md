@@ -19,7 +19,7 @@ This app uses the following technologies and libraries:
 - [React Navigation](https://reactnavigation.org/) (for navigation)
 - [Expo Router](https://expo.github.io/router/docs) (for file-based routing)
 
-It will also use Python, FastAPI, MySQL/MongoDB, and Google Maps API.
+It will also use Python, FastAPI, MongoDB, and Google Maps API.
 
 
 ## Set up/View on Local Machine
