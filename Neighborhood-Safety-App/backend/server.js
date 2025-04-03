@@ -20,6 +20,7 @@ const reportSchema = new mongoose.Schema({
   location: String,
   description: String,
   photoUri: String,
+  Status: "Submitted",
   createdAt: { type: Date, default: Date.now },
 });
 
