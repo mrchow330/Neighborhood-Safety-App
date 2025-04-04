@@ -6,12 +6,16 @@ export default function DrawerLayout() {
     <Drawer
       drawerContent={(props) => (
         <View style={{ flex: 1 }}>
+          {/* Render the default drawer content */}
+          <Drawer.Content {...props} />
+
+          {/* Footer Section */}
           <View style={styles.footer}>
             <Text style={styles.footerText}>© 2025 Team Prodigies</Text>
           </View>
         </View>
       )}
-      >
+    >
       
       <Drawer.Screen 
         name="(tabs)" 
