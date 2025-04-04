@@ -71,7 +71,7 @@ To set up and view the app on your local machine, follow these steps:
    ```bash
    node server.js
    ```
-   - Alternatively, check this [link](https://neighborhood-safety-backend.vercel.app/)
+   - Alternatively, check just this [link](https://neighborhood-safety-backend.vercel.app/)
  to see if the server is running
  
 6. Start the Expo development server:
