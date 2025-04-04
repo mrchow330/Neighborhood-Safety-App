@@ -6,6 +6,8 @@ See live web version here ➡️ [https://neighborhood-safety-app.vercel.app/](h
 
 This app uses the following technologies and libraries:
 
+### Frontend:
+
 - [Expo](https://docs.expo.dev/) (for building and running the app)
 - [React Native](https://reactnative.dev/) (for mobile app development)
 - [TypeScript](https://www.typescriptlang.org/) (for type-safe development)
@@ -19,7 +21,14 @@ This app uses the following technologies and libraries:
 - [React Navigation](https://reactnavigation.org/) (for navigation)
 - [Expo Router](https://expo.github.io/router/docs) (for file-based routing)
 
-It will also use Python, FastAPI, MongoDB, and Google Maps API.
+### Backend: 
+- [express](https://expressjs.com/) (for building the server and handling API routes)
+- [mongoose](https://mongoosejs.com/) (for connecting to and interacting with the MongoDB database)
+- [dotenv](https://www.npmjs.com/package/dotenv) (for managing environment variables securely)
+- [cors](https://www.npmjs.com/package/cors) (for enabling cross-origin resource sharing)
+
+### In the future:
+- Google Maps API.
 
 
 ## Set up/View on Local Machine
@@ -57,11 +66,14 @@ To set up and view the app on your local machine, follow these steps:
      CLOUDINARY_URL=your-cloudinary-upload-url
      ```
 
-5. Start the backend server:
+
+2. Start the MongoDB connection:
    ```bash
    node server.js
    ```
-
+   - Alternatively, check this [link](https://neighborhood-safety-backend.vercel.app/)
+ to see if the server is running
+ 
 6. Start the Expo development server:
    ```bash
    npx expo start
