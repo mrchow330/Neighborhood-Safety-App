@@ -33,6 +33,7 @@ This app uses the following technologies and libraries:
 
 ## Related Repositories
 
+### ```neighborhood-safety-backend```
 The backend repository can be accessed [here](https://github.com/mrchow330/neighborhood-safety-backend).
 
 ## Set up/View on Local Machine
