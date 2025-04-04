@@ -21,6 +21,7 @@ const reportSchema = new mongoose.Schema({
   description: String,
   photoUri: String,
   createdAt: { type: Date, default: Date.now },
+  status: { type: String, default: "Submitted" }, 
 });
 
 const Report = mongoose.model('Report', reportSchema, 'reports');
