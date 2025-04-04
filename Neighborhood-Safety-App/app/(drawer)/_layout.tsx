@@ -7,7 +7,14 @@ export default function DrawerLayout() {
       drawerContent={(props) => (
         <View style={{ flex: 1 }}>
           {/* Render the default drawer items */}
-          <Drawer.ItemList {...props} />
+          {props.state.routes.map((route, index) => (
+            <Drawer.Item
+              key={route.key}
+              label={props.descriptors[route.key].options.drawerLabel || route.name}
+              focused={props.state.index === index}
+              onPress={() => props.navigation.navigate(route.name)}
+            />
+          ))}
 
           {/* Footer Section */}
           <View style={styles.footer}>
@@ -16,10 +23,9 @@ export default function DrawerLayout() {
         </View>
       )}
     >
-      
       <Drawer.Screen 
         name="(tabs)" 
-        options={{ headerShown: true, title: "", drawerLabel:"Home" }} 
+        options={{ headerShown: true, title: "", drawerLabel: "Home" }} 
       />
       <Drawer.Screen 
         name="account" 
@@ -33,22 +39,10 @@ export default function DrawerLayout() {
         name="contactUs" 
         options={{ title: "", drawerLabel: "Contact Us" }} 
       />
-      {/* Drawer-only pages */}
       <Drawer.Screen 
         name="about" 
-        options={{ title: "", drawerLabel:"About Us" }} 
+        options={{ title: "", drawerLabel: "About Us" }} 
       />
-      
-      {/* The (tabs) folder holds the tabs navigator */}
-      {/* <Drawer.Screen 
-        name="home" 
-        options={{ headerShown: true, title: "", drawerLabel:"Home" }} 
-      /> */}
-
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>© 2025 Team Prodigies</Text>
-      </View>
-      
     </Drawer>
   );
 }
@@ -59,6 +53,7 @@ const styles = StyleSheet.create({
     borderTopColor: "#ccc",
     padding: 10,
     alignItems: "center",
+    justifyContent: "center",
   },
   footerText: {
     fontSize: 14,
