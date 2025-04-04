@@ -11,30 +11,35 @@ export default function AboutScreen() {
           <Text style={styles.bodyText}>
             Wardiyah Rammazy, Eric Chow, Cailer Kellenberger, Mason Breidenbach, Caleb Ribeiro
           </Text>
-          <TouchableOpacity onPress={() => Linking.openURL('mailto:help@blockwatch.com')}>
-            <Text style={styles.link}>help@blockwatch.com</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => Linking.openURL('tel:9783330023')}>
-            <Text style={styles.link}>978-333-0023</Text>
-          </TouchableOpacity>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Contact Local Authorities</Text>
+          <Text style={styles.sectionTitle}>MIT License</Text>
           <Text style={styles.bodyText}>
-            To contact local authorities please refer to this list of local hot-lines:
+          Copyright (c) 2025 Team Prodigies(?)
+
+          Permission is hereby granted, free of charge, to any person obtaining a copy
+          of this software and associated documentation files (the "Software"), to deal
+          in the Software without restriction, including without limitation the rights
+          to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+          copies of the Software, and to permit persons to whom the Software is
+          furnished to do so, subject to the following conditions:
+
+          The above copyright notice and this permission notice shall be included in all
+          copies or substantial portions of the Software.
+
+          THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+          IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+          FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+          AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+          LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+          OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+          SOFTWARE.
           </Text>
-          <TouchableOpacity onPress={() => Linking.openURL('https://placeholderlink.com')}>
-            <Text style={styles.link}>placeholderlink.com</Text>
-          </TouchableOpacity>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.emergency}>In the case of an emergency, please dial: 911</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Office and Mailing Location</Text>
+          <Text style={styles.sectionTitle}>Affiliation</Text>
           <Text style={styles.bodyText}>Bradley University</Text>
           <Text style={styles.bodyText}>501 W. Bradley Ave., Peoria, IL 61625</Text>
         </View>
