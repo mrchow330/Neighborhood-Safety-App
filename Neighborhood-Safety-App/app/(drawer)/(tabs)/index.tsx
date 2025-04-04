@@ -30,13 +30,14 @@ export default function Index() {
 
       <Text style={styles.header}>Welcome to {"\n"} HoodWatch (name WIP)</Text>
       {/* <Link href='/about'>about</Link> */}
-      <View >
+      <View>
         <Button label="Report an issue" targetScreen="reportIssue"/>
         <Button label="My Reports" targetScreen="reports"/>
         <Button label="View Live Map" targetScreen="map"/>
       </View>
-      
-      
+      <footer>  
+        <Text style={styles.text}>© 2025 Team Prodigies</Text>
+      </footer>
     </View>
   );
 }
