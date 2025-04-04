@@ -9,7 +9,7 @@ export default function AboutScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Team Prodigies</Text>
           <Text style={styles.bodyText}>
-            To contact our team regarding a report, issue, or anything related to our service, please email or call:
+            Wardiyah Rammazy, Eric Chow, Cailer Kellenberger, Mason Breidenbach, Caleb Ribeiro
           </Text>
           <TouchableOpacity onPress={() => Linking.openURL('mailto:help@blockwatch.com')}>
             <Text style={styles.link}>help@blockwatch.com</Text>
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: '600',
     color: '#1E293B',
     marginBottom: 5,
