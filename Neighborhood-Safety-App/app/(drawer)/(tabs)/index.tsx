@@ -35,9 +35,6 @@ export default function Index() {
         <Button label="My Reports" targetScreen="reports"/>
         <Button label="View Live Map" targetScreen="map"/>
       </View>
-      <footer>  
-        <Text style={styles.text}>© 2025 Team Prodigies</Text>
-      </footer>
     </View>
   );
 }
