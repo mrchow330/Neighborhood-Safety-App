@@ -22,7 +22,7 @@ export default function Index() {
     <View style={styles.container}>
       <Image
         style={styles.image}
-        source={require('../../../assets/images/temp-logo.png')}
+        source={require('../../../assets/images/neighborhood-watch-sign.png')}
         // placeholder={{ blurhash }}
         contentFit="cover"
         transition={1000}
