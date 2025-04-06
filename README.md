@@ -31,6 +31,11 @@ This app uses the following technologies and libraries:
 - Google Maps API.
 
 
+## Related Repositories
+
+### ```neighborhood-safety-backend```
+The backend repository can be accessed [here](https://github.com/mrchow330/neighborhood-safety-backend).
+
 ## Set up/View on Local Machine
 
 To set up and view the app on your local machine, follow these steps:
