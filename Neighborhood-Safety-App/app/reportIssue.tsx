@@ -354,6 +354,10 @@ export default function ReportScreen() {
             <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
               <Text style={styles.submitButtonText}>Submit Report</Text>
             </TouchableOpacity>
+            {/* Display the submission message */}
+            {submissionMessage ? (
+              <Text style={styles.modalText}>{submissionMessage}</Text>
+            ) : null}
           </View>
         </View>
       </Modal>
