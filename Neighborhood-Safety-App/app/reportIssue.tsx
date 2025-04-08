@@ -233,6 +233,7 @@ export default function ReportScreen() {
       setTimeout(() => {
         handleCloseModal();
         setSubmissionMessage(""); // Clear the message after closing
+        router.push('/'); // Redirect to the homepage
       }, 3000);
     } catch (error) {
       console.error("Error submitting report:", error);
