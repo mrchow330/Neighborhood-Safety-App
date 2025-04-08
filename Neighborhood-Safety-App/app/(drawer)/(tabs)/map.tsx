@@ -1,22 +1,52 @@
-import { Text, View, StyleSheet } from 'react-native';
+import React from 'react'
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 
-export default function MapScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Map</Text>
-    </View>
-  );
+const containerStyle = {
+  width: '400px',
+  height: '400px',
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8FAFC',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: '#1E293B',
-    fontFamily: 'Nunito_400Regular'
-  },
-});
+const center = {
+  lat: -3.745,
+  lng: -38.523,
+}
+
+function MyComponent() {
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: 'AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY',
+  })
+
+  const [map, setMap] = React.useState(null)
+
+  const onLoad = React.useCallback(function callback(map) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    const bounds = new window.google.maps.LatLngBounds(center)
+    map.fitBounds(bounds)
+
+    setMap(map)
+  }, [])
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null)
+  }, [])
+
+  return isLoaded ? (
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={center}
+      zoom={10}
+      onLoad={onLoad}
+      onUnmount={onUnmount}
+    >
+      {/* Child components, such as markers, info windows, etc. */}
+      <></>
+    </GoogleMap>
+  ) : (
+    <></>
+  )
+}
+
+export default React.memo(MyComponent)
+
+// "AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY"
