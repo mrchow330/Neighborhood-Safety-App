@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
 });
 
 const [geoLocation, setGeoLocation] = useState(null); // For storing GeoJSON location
-
+const [location, setLocation] = useState("");
 
 const fetchUserLocation = () => {
   navigator.geolocation.getCurrentPosition(
@@ -326,10 +326,10 @@ export default function ReportScreen() {
           <TextInput
             style={styles.textInput}
             placeholder="Enter location of the issue or use 'Use My Location'"
-            value={location}
-            onChangeText={(text) => setLocation(text)}
+            value={location} // This will now reflect the updated location
+            onChangeText={(text) => setLocation(text)} // Allow manual updates as well
           />
-          <View style={{ marginTop: 20 }}>
+          <View style={{ marginTop: 17 }}>
             <Button title="Use My Location" onPress={fetchUserLocation} />
           </View>
           <TextInput
