@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   submissionMessage:{
     fontSize: 24,
-    marginBottom: 10,
+    marginBottom: 7,
     textAlign: 'center',
   }
 });
