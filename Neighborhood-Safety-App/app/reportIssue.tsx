@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   submissionMessage:{
-    fontSize: 16,
+    fontSize: 24,
     marginBottom: 10,
     textAlign: 'center',
   }
