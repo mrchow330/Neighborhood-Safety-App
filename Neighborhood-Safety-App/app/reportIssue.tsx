@@ -194,6 +194,8 @@ export default function ReportScreen() {
     }
   };
 
+  const [submissionMessage, setSubmissionMessage] = useState("");
+
   const handleSubmit = async () => {
     try {
       const reportId = uuidv4(); // Generate a unique ID for the report
@@ -218,7 +220,7 @@ export default function ReportScreen() {
   
       const response = await axios.post('https://neighborhood-safety-backend.vercel.app/api/reports', reportData);
   
-      alert('Report submitted successfully!');
+      setSubmissionMessage("Report submitted successfully!\nRedirecting to homepage...");
       console.log(response.data);
   
       // Clear the form after submission
@@ -227,15 +229,15 @@ export default function ReportScreen() {
       setDescription('');
       setPhoto(null);
   
-      // Close the modal
-      handleCloseModal();
-  
-      // Redirect to the homepage
-      router.push('/');
+      // Close the modal after a delay
+      setTimeout(() => {
+        handleCloseModal();
+        setSubmissionMessage(""); // Clear the message after closing
+      }, 3000);
     } catch (error) {
-      console.error('Error submitting report:', error);
-      alert('Failed to submit the report. Please try again.');
-    }
+      console.error("Error submitting report:", error);
+      setSubmissionMessage("Failed to submit the report. Please try again.");
+      }
   };
 
 
