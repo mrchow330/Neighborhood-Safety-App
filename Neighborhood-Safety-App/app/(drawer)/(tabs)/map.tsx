@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { APIProvider, Map } from '@vis.gl/react-google-maps';
 
 const API_KEY =
-  globalThis.GOOGLE_MAPS_API_KEY ?? ("YOUR_API_KEY");
+  globalThis.GOOGLE_MAPS_API_KEY ?? ("AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY");
 
 const App = () => (
   <APIProvider
