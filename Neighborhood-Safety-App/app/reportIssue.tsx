@@ -120,6 +120,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
+  submissionMessage:{
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: 'center',
+  }
 });
 
 export default function ReportScreen() {
@@ -195,6 +200,7 @@ export default function ReportScreen() {
   };
 
   const [submissionMessage, setSubmissionMessage] = useState("");
+  const [submissionMessageColor, setSubmissionMessageColor] = useState("#000"); // Default color
 
   const handleSubmit = async () => {
     try {
@@ -205,7 +211,8 @@ export default function ReportScreen() {
         try {
           photoUri = await uploadToCloudinary(photo, reportId); // Pass the report ID to Cloudinary
         } catch (error) {
-          alert('Failed to upload the image. Please try again.');
+          setSubmissionMessage("Failed to upload the image. Please try again.");
+          setSubmissionMessageColor("#dc3545");
           return;
         }
       }
@@ -221,6 +228,7 @@ export default function ReportScreen() {
       const response = await axios.post('https://neighborhood-safety-backend.vercel.app/api/reports', reportData);
   
       setSubmissionMessage("Report submitted successfully!\nRedirecting to homepage...");
+      setSubmissionMessageColor("#28a745")
       console.log(response.data);
   
       // Clear the form after submission
@@ -238,6 +246,7 @@ export default function ReportScreen() {
     } catch (error) {
       console.error("Error submitting report:", error);
       setSubmissionMessage("Failed to submit the report. Please try again.");
+      setSubmissionMessageColor("#dc3545");
       }
   };
 
@@ -357,7 +366,9 @@ export default function ReportScreen() {
             </TouchableOpacity>
             {/* Display the submission message */}
             {submissionMessage ? (
-              <Text style={styles.modalText}>{submissionMessage}</Text>
+              <Text style={[styles.submissionMessage, { color: submissionMessageColor }]}>
+                {submissionMessage}
+              </Text>
             ) : null}
           </View>
         </View>
