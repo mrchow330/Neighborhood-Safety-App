@@ -2,8 +2,14 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { APIProvider, Map } from '@vis.gl/react-google-maps';
 
+declare global {
+  interface Global {
+    GOOGLE_MAPS_API_KEY?: string;
+  }
+}
+
 const API_KEY =
-  globalThis.GOOGLE_MAPS_API_KEY ?? ("AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY");
+  (globalThis as Global).GOOGLE_MAPS_API_KEY ?? ("AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY");
 
 const App = () => (
   <APIProvider
