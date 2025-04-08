@@ -127,6 +127,26 @@ const styles = StyleSheet.create({
   }
 });
 
+const [geoLocation, setGeoLocation] = useState(null); // For storing GeoJSON location
+
+
+const fetchUserLocation = () => {
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const { latitude, longitude } = position.coords;
+      setGeoLocation({
+        type: "Point",
+        coordinates: [longitude, latitude], // GeoJSON format: [longitude, latitude]
+      });
+      setLocation(`Lat: ${latitude}, Lng: ${longitude}`); // Optional: Update the location text input
+    },
+    (error) => {
+      console.error("Error fetching location:", error);
+      alert("Unable to fetch your location. Please enable location services.");
+    }
+  );
+};
+
 export default function ReportScreen() {
   const [selectedIssue, setSelectedIssue] = useState("");
   const [location, setLocation] = useState("");
@@ -220,7 +240,7 @@ export default function ReportScreen() {
       const reportData = {
         report_id: reportId, // Include the unique report ID in the report data
         issueType: selectedIssue,
-        location,
+        location: geoLocation || { type: "Point", coordinates: [] },
         description,
         photoUri, // This will contain the Cloudinary URL of the uploaded image
       };
@@ -305,10 +325,13 @@ export default function ReportScreen() {
           <Text style={styles.text}>Fill out the fields below to submit your report</Text>
           <TextInput
             style={styles.textInput}
-            placeholder="Enter location of the issue"
+            placeholder="Enter location of the issue or use 'Use My Location'"
             value={location}
             onChangeText={(text) => setLocation(text)}
           />
+          <View style={{ marginTop: 20 }}>
+            <Button title="Use My Location" onPress={fetchUserLocation} />
+          </View>
           <TextInput
             style={styles.textArea}
             placeholder="Describe the issue in detail"
