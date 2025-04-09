@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Pressable, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';  
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';  // For proper typing
-import { RootStackParamList } from '../app/_layout'; 
+import { RootStackParamList } from '../app/(authorized)/_layout'; 
 
 type Props = {
   label: string;
