@@ -14,8 +14,12 @@ const center = {
 function MyComponent() {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: 'AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY',
-  })
+    googleMapsApiKey: '',
+    googleMapsApiOptions: {
+      libraries: ['places'],
+    },
+    loadScriptUrl: 'https://neighborhood-safety-backend.vercel.app/api/google-maps-api', // Use the backend proxy endpoint
+  });
 
   const [map, setMap] = React.useState(null)
 
