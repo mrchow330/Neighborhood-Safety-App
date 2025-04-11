@@ -1,5 +1,6 @@
 import React from 'react'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
+import { GOOGLE_MAPS_API_KEY } from '../../../config';
 
 const containerStyle = {
   width: '400px',
@@ -14,11 +15,10 @@ const center = {
 function MyComponent() {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: '',
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY, 
     googleMapsApiOptions: {
       libraries: ['places'],
     },
-    loadScriptUrl: 'https://neighborhood-safety-backend.vercel.app/api/google-maps-api', // Use the backend proxy endpoint
   });
 
   const [map, setMap] = React.useState(null)
@@ -52,5 +52,3 @@ function MyComponent() {
 }
 
 export default React.memo(MyComponent)
-
-// "AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY"
