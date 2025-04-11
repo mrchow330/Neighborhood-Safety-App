@@ -12,6 +12,12 @@ const center = {
   lng: -38.523,
 }
 
+const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+if (!googleMapsApiKey) {
+  throw new Error('Google Maps API key is missing. Please set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in your environment variables.');
+}
+console.log('Google Maps API Key:', process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
+
 function MyComponent() {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
