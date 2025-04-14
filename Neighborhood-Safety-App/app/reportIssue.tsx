@@ -120,7 +120,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
+  submissionMessage:{
+    fontSize: 24,
+    marginBottom: 7,
+    textAlign: 'center',
+  }
 });
+
+const [geoLocation, setGeoLocation] = useState(null); // For storing GeoJSON location
+const [location, setLocation] = useState("");
+
+const fetchUserLocation = () => {
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const { latitude, longitude } = position.coords;
+      setGeoLocation({
+        type: "Point",
+        coordinates: [longitude, latitude], // GeoJSON format: [longitude, latitude]
+      });
+      setLocation(`Lat: ${latitude}, Lng: ${longitude}`); // Optional: Update the location text input
+    },
+    (error) => {
+      console.error("Error fetching location:", error);
+      alert("Unable to fetch your location. Please enable location services.");
+    }
+  );
+};
 
 export default function ReportScreen() {
   const [selectedIssue, setSelectedIssue] = useState("");
@@ -194,6 +219,9 @@ export default function ReportScreen() {
     }
   };
 
+  const [submissionMessage, setSubmissionMessage] = useState("");
+  const [submissionMessageColor, setSubmissionMessageColor] = useState("#000"); // Default color
+
   const handleSubmit = async () => {
     try {
       const reportId = uuidv4(); // Generate a unique ID for the report
@@ -203,7 +231,8 @@ export default function ReportScreen() {
         try {
           photoUri = await uploadToCloudinary(photo, reportId); // Pass the report ID to Cloudinary
         } catch (error) {
-          alert('Failed to upload the image. Please try again.');
+          setSubmissionMessage("Failed to upload the image. Please try again.");
+          setSubmissionMessageColor("#dc3545");
           return;
         }
       }
@@ -211,14 +240,15 @@ export default function ReportScreen() {
       const reportData = {
         report_id: reportId, // Include the unique report ID in the report data
         issueType: selectedIssue,
-        location,
+        location: geoLocation || { type: "Point", coordinates: [] },
         description,
         photoUri, // This will contain the Cloudinary URL of the uploaded image
       };
   
       const response = await axios.post('https://neighborhood-safety-backend.vercel.app/api/reports', reportData);
   
-      alert('Report submitted successfully!');
+      setSubmissionMessage("Report submitted successfully!\nRedirecting to homepage...");
+      setSubmissionMessageColor("#28a745")
       console.log(response.data);
   
       // Clear the form after submission
@@ -227,15 +257,17 @@ export default function ReportScreen() {
       setDescription('');
       setPhoto(null);
   
-      // Close the modal
-      handleCloseModal();
-  
-      // Redirect to the homepage
-      router.push('/');
+      // Close the modal after a delay
+      setTimeout(() => {
+        handleCloseModal();
+        setSubmissionMessage(""); // Clear the message after closing
+        router.push('/'); // Redirect to the homepage
+      }, 3000);
     } catch (error) {
-      console.error('Error submitting report:', error);
-      alert('Failed to submit the report. Please try again.');
-    }
+      console.error("Error submitting report:", error);
+      setSubmissionMessage("Failed to submit the report. Please try again.");
+      setSubmissionMessageColor("#dc3545");
+      }
   };
 
 
@@ -293,10 +325,13 @@ export default function ReportScreen() {
           <Text style={styles.text}>Fill out the fields below to submit your report</Text>
           <TextInput
             style={styles.textInput}
-            placeholder="Enter location of the issue"
-            value={location}
-            onChangeText={(text) => setLocation(text)}
+            placeholder="Enter location of the issue or use 'Use My Location'"
+            value={location} // This will now reflect the updated location
+            onChangeText={(text) => setLocation(text)} // Allow manual updates as well
           />
+          <View style={{ marginTop: 17 }}>
+            <Button title="Use My Location" onPress={fetchUserLocation} />
+          </View>
           <TextInput
             style={styles.textArea}
             placeholder="Describe the issue in detail"
@@ -352,6 +387,12 @@ export default function ReportScreen() {
             <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
               <Text style={styles.submitButtonText}>Submit Report</Text>
             </TouchableOpacity>
+            {/* Display the submission message */}
+            {submissionMessage ? (
+              <Text style={[styles.submissionMessage, { color: submissionMessageColor }]}>
+                {submissionMessage}
+              </Text>
+            ) : null}
           </View>
         </View>
       </Modal>
