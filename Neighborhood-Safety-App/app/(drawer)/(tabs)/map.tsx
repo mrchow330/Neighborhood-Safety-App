@@ -1,21 +1,32 @@
 import React from 'react'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 
+import { GOOGLE_MAPS_API_KEY } from '../../../config';
+
 const containerStyle = {
-  width: '400px',
-  height: '400px',
+  width: '1000px',
+  height: '1000px',
 }
 
 const center = {
-  lat: -3.745,
-  lng: -38.523,
+  lat: 40.698,
+  lng: -89.615,
 }
+
+// const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+// if (!googleMapsApiKey) {
+//   throw new Error('Google Maps API key is missing. Please set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in your environment variables.');
+// }
+// console.log('Google Maps API Key:', process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
 
 function MyComponent() {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: 'AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY',
-  })
+    googleMapsApiKey: 'AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY', 
+    googleMapsApiOptions: {
+      libraries: ['places'],
+    },
+  });
 
   const [map, setMap] = React.useState(null)
 
@@ -48,5 +59,3 @@ function MyComponent() {
 }
 
 export default React.memo(MyComponent)
-
-// "AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY"
