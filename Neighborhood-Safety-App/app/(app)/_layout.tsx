@@ -1,5 +1,5 @@
 import { Redirect, Stack } from "expo-router";
-import {Text} from "react-native";
+import {Text, StyleSheet} from "react-native";
 import {useSession} from '../../components/ctx'; 
 
 export default function AppLayout(){
@@ -7,7 +7,7 @@ export default function AppLayout(){
 
   if (isLoading){
     //splash screen
-    return <Text>Loading...</Text>
+    return <Text style={styles.text}>Loading...</Text>
   }
 
   if (!session){
@@ -31,6 +31,19 @@ export default function AppLayout(){
       );
 
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F8FAFC',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    color: '#1E293B',
+    fontFamily: 'Nunito_400Regular'
+  },
+});
 
 export type RootStackParamList = {
   "(tabs)": undefined;  // This screen has no parameters
