@@ -186,15 +186,17 @@ export default function ReportScreen() {
     );
   };
 
+  
+
   const handleMapClick = (event) => {
     const { lat, lng } = event.latLng.toJSON();
     const geoJsonLocation = {
       type: "Point",
       coordinates: [lng, lat], // GeoJSON format: [longitude, latitude]
     };
+    console.log("Selected Location:", geoJsonLocation); // Debugging
     setGeoLocation(geoJsonLocation); // Update the GeoJSON location state
     setMapLocation({ lat, lng }); // Update the map marker
-    setLocation(geoJsonLocation); // Update the location state to follow the schema
   };
 
   const pickImage = async () => {
@@ -264,7 +266,16 @@ export default function ReportScreen() {
   const [submissionMessageColor, setSubmissionMessageColor] = useState("#000"); // Default color
 
   const handleSubmit = async () => {
+      
+    
     try {
+
+      // Validate that a location has been selected
+      if (!geoLocation || !geoLocation.coordinates || geoLocation.coordinates.length !== 2) {
+        alert("Please select a location on the map.");
+        return;
+      }
+
       const reportId = uuidv4(); // Generate a unique ID for the report
       let photoUri = null;
   
