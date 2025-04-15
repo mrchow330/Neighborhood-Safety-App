@@ -136,4 +136,4 @@ When the build is completed, you will get a link to download the APK or AAB file
 
 ---
 
-Happy coding!
+
