@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
 // Define styles at the top
 const styles = StyleSheet.create({
@@ -124,37 +125,59 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 7,
     textAlign: 'center',
+  },
+  mapContainer: {
+    width: '100%',
+    height: 300,
+    marginBottom: 20,
   }
 });
 
-const [geoLocation, setGeoLocation] = useState(null); // For storing GeoJSON location
-const [location, setLocation] = useState("");
 
-const fetchUserLocation = () => {
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const { latitude, longitude } = position.coords;
-      setGeoLocation({
-        type: "Point",
-        coordinates: [longitude, latitude], // GeoJSON format: [longitude, latitude]
-      });
-      setLocation(`Lat: ${latitude}, Lng: ${longitude}`); // Optional: Update the location text input
-    },
-    (error) => {
-      console.error("Error fetching location:", error);
-      alert("Unable to fetch your location. Please enable location services.");
-    }
-  );
-};
+
 
 export default function ReportScreen() {
-  const [selectedIssue, setSelectedIssue] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
+  const [selectedIssue, setSelectedIssue] = useState('');
+  const [location, setLocation] = useState('');
+  const [description, setDescription] = useState('');
   const [photo, setPhoto] = useState(null);
+  const [geoLocation, setGeoLocation] = useState(null); 
+  const [mapLocation, setMapLocation] = useState(center); 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const router = useRouter(); // Use useRouter at the top level
+  const router = useRouter(); 
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: 'AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY',
+  });
+
+  const fetchUserLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setGeoLocation({
+          type: "Point",
+          coordinates: [longitude, latitude], // GeoJSON format: [longitude, latitude]
+        });
+        setLocation(`Lat: ${latitude}, Lng: ${longitude}`); 
+      },
+      (error) => {
+        console.error("Error fetching location:", error);
+        alert("Unable to fetch your location. Please enable location services.");
+      }
+    );
+  };
+
+  const handleMapClick = (event) => {
+    const { lat, lng } = event.latLng.toJSON();
+    setGeoLocation({
+      type: 'Point',
+      coordinates: [lng, lat], // GeoJSON format: [longitude, latitude]
+    });
+    setMapLocation({ lat, lng }); // Update map marker
+    setLocation(`Lat: ${lat}, Lng: ${lng}`); // Optional: Update the location text input
+  };
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -238,11 +261,11 @@ export default function ReportScreen() {
       }
   
       const reportData = {
-        report_id: reportId, // Include the unique report ID in the report data
+        report_id: reportId,
         issueType: selectedIssue,
-        location: geoLocation || { type: "Point", coordinates: [] },
+        location: geoLocation || { type: 'Point', coordinates: [] }, // Use GeoJSON location
         description,
-        photoUri, // This will contain the Cloudinary URL of the uploaded image
+        photoUri, // Cloudinary URL of the uploaded image
       };
   
       const response = await axios.post('https://neighborhood-safety-backend.vercel.app/api/reports', reportData);
@@ -256,6 +279,8 @@ export default function ReportScreen() {
       setLocation('');
       setDescription('');
       setPhoto(null);
+      setGeoLocation(null);
+      setMapLocation(center);
   
       // Close the modal after a delay
       setTimeout(() => {
