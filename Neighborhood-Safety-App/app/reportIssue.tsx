@@ -130,6 +130,19 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 300,
     marginBottom: 20,
+  },
+  mapSnapshotContainer: {
+    width: '100%',
+    height: 200,
+    marginTop: 10,
+    borderRadius: 10,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+  },
+  mapSnapshot: {
+    width: '100%',
+    height: '100%',
   }
 });
 
@@ -406,8 +419,25 @@ export default function ReportScreen() {
               <Text style={styles.boldText}>Issue Type:</Text> {selectedIssue || "Not selected"}
             </Text>
             <Text style={styles.modalText}>
-              <Text style={styles.boldText}>Location:</Text> {location || "Not provided"}
+              <Text style={styles.boldText}>Location:</Text>{' '}
+              {geoLocation ? `Lat: ${mapLocation.lat}, Lng: ${mapLocation.lng}` : 'Not provided'}
             </Text>
+
+            {geoLocation && (
+              <View style={styles.mapSnapshotContainer}>
+                <GoogleMap
+                  mapContainerStyle={styles.mapSnapshot}
+                  center={mapLocation}
+                  zoom={15}
+                  options={{
+                    disableDefaultUI: true, // Hide default controls for a cleaner snapshot
+                    draggable: false, // Disable dragging
+                  }}
+                >
+                  <Marker position={mapLocation} />
+                </GoogleMap>
+              </View>
+            )}
             <Text style={styles.modalText}>
               <Text style={styles.boldText}>Description:</Text> {description || "Not provided"}
             </Text>
