@@ -3,7 +3,7 @@ import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 import { GOOGLE_MAPS_API_KEY } from '../../../config';
 
 const containerStyle = {
-  width: '1000px',
+  width: '1500px',
   height: '1000px',
 }
 
