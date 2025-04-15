@@ -159,11 +159,12 @@ export default function ReportScreen() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        setGeoLocation({
+        const geoJsonLocation = {
           type: "Point",
           coordinates: [longitude, latitude], // GeoJSON format: [longitude, latitude]
-        });
-        setLocation(`Lat: ${latitude}, Lng: ${longitude}`); 
+        };
+        setGeoLocation(geoJsonLocation); 
+        setLocation(geoJsonLocation); 
       },
       (error) => {
         console.error("Error fetching location:", error);
@@ -174,12 +175,13 @@ export default function ReportScreen() {
 
   const handleMapClick = (event) => {
     const { lat, lng } = event.latLng.toJSON();
-    setGeoLocation({
-      type: 'Point',
+    const geoJsonLocation = {
+      type: "Point",
       coordinates: [lng, lat], // GeoJSON format: [longitude, latitude]
-    });
-    setMapLocation({ lat, lng }); // Update map marker
-    setLocation(`Lat: ${lat}, Lng: ${lng}`); // Optional: Update the location text input
+    };
+    setGeoLocation(geoJsonLocation); // Update the GeoJSON location state
+    setMapLocation({ lat, lng }); // Update the map marker
+    setLocation(geoJsonLocation); // Update the location state to follow the schema
   };
 
   const pickImage = async () => {
@@ -338,7 +340,7 @@ export default function ReportScreen() {
         <Picker
           selectedValue={selectedIssue}
           onValueChange={(itemValue) => setSelectedIssue(itemValue)}
-          style={[styles.picker, { marginTop: 20 }]} // Correctly combines styles
+          style={[styles.picker, { marginTop: 20 }]}
         >
           <Picker.Item label="Select an issue type" value="" />
           <Picker.Item label="Pothole/Road Damage" value="pothole" />
@@ -347,19 +349,27 @@ export default function ReportScreen() {
           <Picker.Item label="Other" value="other" />
         </Picker>
 
-        {/* Add spacing below the dropdown */}
         <View style={{ marginTop: 30 }}>
+
           {/* Form Section */}
-          <Text style={styles.text}>Fill out the fields below to submit your report</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Enter location of the issue or use 'Use My Location'"
-            value={location} // This will now reflect the updated location
-            onChangeText={(text) => setLocation(text)} // Allow manual updates as well
-          />
-          <View style={{ marginTop: 17 }}>
-            <Button title="Use My Location" onPress={fetchUserLocation} />
-          </View>
+          <Text style={styles.text}>Select Location on the Map</Text>
+          {isLoaded && (
+            <View style={styles.mapContainer}>
+              <GoogleMap
+                mapContainerStyle={styles.mapContainer}
+                center={mapLocation}
+                zoom={15}
+                onClick={handleMapClick}
+              >
+                <Marker position={mapLocation} />
+              </GoogleMap>
+            </View>
+          )}
+          {geoLocation && (
+            <Text style={styles.text}>
+              Selected Location: Lat {mapLocation.lat}, Lng {mapLocation.lng}
+            </Text>
+          )}
           <TextInput
             style={styles.textArea}
             placeholder="Describe the issue in detail"
