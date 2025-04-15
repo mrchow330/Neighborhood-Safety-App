@@ -134,7 +134,10 @@ const styles = StyleSheet.create({
 });
 
 
-
+const center = {
+  lat: 40.698, // Default latitude
+  lng: -89.615, // Default longitude
+};
 
 export default function ReportScreen() {
   const [selectedIssue, setSelectedIssue] = useState('');
