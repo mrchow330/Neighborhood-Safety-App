@@ -177,7 +177,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', 
   },
   input: {
-    width: '39%',
+    width: '20%',
+    minWidth: 300,
     color: '#1e3a8a',
     padding: 15,
     borderColor: '#d1d5db',
