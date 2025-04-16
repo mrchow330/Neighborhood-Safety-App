@@ -305,14 +305,6 @@ export default function ReportScreen() {
       setSubmissionMessageColor("#28a745")
       console.log(response.data);
   
-      // Clear the form after submission
-      setSelectedIssue('');
-      setLocation('');
-      setDescription('');
-      setPhoto(null);
-      setGeoLocation(null);
-      setMapLocation(center);
-  
       // Close the modal after a delay
       setTimeout(() => {
         handleCloseModal();
