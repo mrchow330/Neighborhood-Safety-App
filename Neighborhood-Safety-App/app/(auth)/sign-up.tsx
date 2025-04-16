@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView} from 'react-native';
+import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert} from 'react-native';
 import Button from '@/components/Button';
 import React, { useState } from 'react';
 
@@ -9,11 +9,70 @@ export default function CreateAccountScreen() {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  // const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const handleSignUp = () => {
-    console.log('Sign Up', {firstName, lastName, username, email, phoneNumber, password, confirmPassword});
-  }
+  const handleSignUp = async () => {
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    if (!firstName || !lastName || !username || !password) {
+      setErrorMessage('First name, last name, username, and password are required.');
+      return;
+    }
+
+    if (!email || !phoneNumber) {
+      setErrorMessage('Please provide email and phone number.');
+      return;
+    }
+    const userData = {
+      first_name: firstName,
+      last_name: lastName,
+      username: username,
+      password: password,
+      email: email,
+      phone_number: phoneNumber,
+    };
+
+    try {
+      const response = await fetch('https://neighborhood-safety-backend.vercel.app/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setSuccessMessage(data.message);
+        console.log('Registration successful:', data);
+        // Optionally, navigate to a login screen or display a confirmation
+        // Example of using Alert for feedback:
+        Alert.alert('Success', data.message, [
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ]);
+        // Clear the form
+        setFirstName('');
+        setLastName('');
+        setUsername('');
+        setEmail('');
+        setPhoneNumber('');
+        setPassword('');
+      } else {
+        setErrorMessage(data.error || 'Registration failed. Please try again.');
+        console.error('Registration error:', data);
+        // Optionally, use Alert to display the error
+        Alert.alert('Error', data.error || 'Registration failed. Please try again.');
+      }
+    } catch (error) {
+      setErrorMessage('Network error. Please check your connection and try again.');
+      console.error('Registration network error:', error);
+      Alert.alert('Error', 'Network error. Please check your connection and try again.');
+    }
+
+  };
 
   return (
     <ScrollView style={styles.scrollViewContainer} contentContainerStyle={styles.container}>
@@ -59,13 +118,13 @@ export default function CreateAccountScreen() {
         value={password}
         onChangeText={setPassword}
       />
-      <TextInput
+      {/* <TextInput
         style={styles.input}
         placeholder="Confirm Password"
         secureTextEntry={true}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
-      />
+      /> */}
       <View>
           <Button label="Sign Up" targetScreen="login"
           style={{ height: '80%', width: '100%'}} // Override button styles
@@ -127,7 +186,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: 'white',
     fontSize: 16,
-    fontStyle: 'italic',
   },
   loginContainer: {
     flexDirection: 'row',
