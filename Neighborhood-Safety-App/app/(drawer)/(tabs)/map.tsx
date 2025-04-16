@@ -4,7 +4,7 @@ import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 import { GOOGLE_MAPS_API_KEY } from '../../../config';
 
 const containerStyle = {
-  width: '1000px',
+  width: '1550px',
   height: '1000px',
 }
 
@@ -31,10 +31,6 @@ function MyComponent() {
   const [map, setMap] = React.useState(null)
 
   const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(center)
-    map.fitBounds(bounds)
-
     setMap(map)
   }, [])
 
