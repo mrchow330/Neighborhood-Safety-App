@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '39%',
+    color: '#1e3a8a',
     padding: 15,
     borderColor: '#d1d5db',
     borderWidth: 1,
@@ -99,8 +100,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dontHaveAccount: {
-    color: '#4b5563',
     fontSize: 14,
+    color: '#1e3a8a',
   },
   signUpLink: {
     color: '#1e3a8a',
