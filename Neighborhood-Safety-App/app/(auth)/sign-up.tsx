@@ -82,24 +82,28 @@ export default function CreateAccountScreen() {
       <TextInput
         style={styles.input}
         placeholder="First Name"
+        placeholderTextColor="#4760a6"
         value={firstName}
         onChangeText={setFirstName}
       />
       <TextInput
         style={styles.input}
         placeholder="Last Name"
+        placeholderTextColor="#4760a6"
         value={lastName}
         onChangeText={setLastName}
       />
       <TextInput
         style={styles.input}
         placeholder="Username"
+        placeholderTextColor="#4760a6"
         value={username}
         onChangeText={setUsername}
       />
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor="#4760a6"
         keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
@@ -107,6 +111,7 @@ export default function CreateAccountScreen() {
       <TextInput
         style={styles.input}
         placeholder="Phone Number"
+        placeholderTextColor="#4760a6"
         keyboardType="phone-pad"
         value={phoneNumber}
         onChangeText={setPhoneNumber}
@@ -114,6 +119,7 @@ export default function CreateAccountScreen() {
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor="#4760a6"
         secureTextEntry={true}
         value={password}
         onChangeText={setPassword}
