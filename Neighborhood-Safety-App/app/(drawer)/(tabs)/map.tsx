@@ -75,7 +75,7 @@ const center = {
 function MyComponent() {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: 'AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY', // Use your config instead of hardcoding
+    googleMapsApiKey: 'AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY',
     googleMapsApiOptions: {
       libraries: ['places'],
     },
@@ -102,7 +102,7 @@ function MyComponent() {
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
-      center={markerPosition || center}
+      center={center} // stays fixed
       zoom={10}
       onLoad={onLoad}
       onUnmount={onUnmount}
@@ -116,3 +116,4 @@ function MyComponent() {
 }
 
 export default React.memo(MyComponent)
+
