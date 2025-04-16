@@ -8,4 +8,5 @@ export default function Root() {
       <Slot />
     </SessionProvider>
   );
+  
 }
