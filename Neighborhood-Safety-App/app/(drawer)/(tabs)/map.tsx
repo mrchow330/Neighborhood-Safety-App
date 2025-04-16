@@ -75,7 +75,7 @@ const center = {
 function MyComponent() {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY, // Use your config instead of hardcoding
+    googleMapsApiKey: 'AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY', // Use your config instead of hardcoding
     googleMapsApiOptions: {
       libraries: ['places'],
     },
