@@ -1,22 +1,61 @@
-import { Text, View, StyleSheet } from 'react-native';
+import React from 'react'
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 
-export default function MapScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Map</Text>
-    </View>
-  );
+import { GOOGLE_MAPS_API_KEY } from '../../../config';
+
+const containerStyle = {
+  width: '1000px',
+  height: '1000px',
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8FAFC',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: '#1E293B',
-    fontFamily: 'Nunito_400Regular'
-  },
-});
+const center = {
+  lat: 40.698,
+  lng: -89.615,
+}
+
+// const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+// if (!googleMapsApiKey) {
+//   throw new Error('Google Maps API key is missing. Please set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in your environment variables.');
+// }
+// console.log('Google Maps API Key:', process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
+
+function MyComponent() {
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: 'AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY', 
+    googleMapsApiOptions: {
+      libraries: ['places'],
+    },
+  });
+
+  const [map, setMap] = React.useState(null)
+
+  const onLoad = React.useCallback(function callback(map) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    const bounds = new window.google.maps.LatLngBounds(center)
+    map.fitBounds(bounds)
+
+    setMap(map)
+  }, [])
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null)
+  }, [])
+
+  return isLoaded ? (
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={center}
+      zoom={10}
+      onLoad={onLoad}
+      onUnmount={onUnmount}
+    >
+      {/* Child components, such as markers, info windows, etc. */}
+      <></>
+    </GoogleMap>
+  ) : (
+    <></>
+  )
+}
+
+export default React.memo(MyComponent)
