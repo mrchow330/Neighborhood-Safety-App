@@ -40,14 +40,14 @@ const styles = StyleSheet.create({
     color: '#1E293B',
   },
   textArea: {
+    margin: 20,
     height: 100,
-    width: 250,
+    width: 750,
     borderColor: '#CBD5E1',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 10,
-    marginBottom: 20,
     color: '#1E293B',
     textAlignVertical: 'top', // Ensures text starts at the top of the text area
   },
@@ -82,6 +82,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   boldText: {
+    fontWeight: 'bold',
+  },
+  buttonStyle: {
+    backgroundColor: '#1E293B',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  buttonTextStyle: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    textAlign: 'center',
     fontWeight: 'bold',
   },
   closeButton: {
@@ -177,7 +191,8 @@ export default function ReportScreen() {
           coordinates: [longitude, latitude], // GeoJSON format: [longitude, latitude]
         };
         setGeoLocation(geoJsonLocation); 
-        setLocation(geoJsonLocation); 
+        setMapLocation({ lat: latitude, lng: longitude }); 
+        console.log("User's Current Location:", geoJsonLocation); // Debugging
       },
       (error) => {
         console.error("Error fetching location:", error);
@@ -369,7 +384,7 @@ export default function ReportScreen() {
         <View style={{ marginTop: 30 }}>
 
           {/* Form Section */}
-          <Text style={styles.text}>Select Location on the Map</Text>
+          <Text style={styles.text}>Select Location on the Map or press "Use My Location"</Text>
           {isLoaded && (
             <View style={styles.mapContainer}>
               <GoogleMap
@@ -387,26 +402,43 @@ export default function ReportScreen() {
               Selected Location: Lat {mapLocation.lat}, Lng {mapLocation.lng}
             </Text>
           )}
-          <TextInput
-            style={styles.textArea}
-            placeholder="Describe the issue in detail"
-            value={description}
-            onChangeText={(text) => setDescription(text)}
-            multiline={true}
-            numberOfLines={4}
-          />
-          <View style={{ marginTop: 50 }}>
-            <Button 
-              title="Upload Photo (Optional)" 
-              onPress={pickImage} 
+          <View style={{ marginTop: 20 }}>
+            <TouchableOpacity style={styles.buttonStyle} onPress={fetchUserLocation}>
+              <Text style={styles.buttonTextStyle}>Use My Location</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ marginTop: 20 }}>
+            <TouchableOpacity style={styles.buttonStyle} onPress={pickImage}>
+              <Text style={styles.buttonTextStyle}>Upload Photo (Optional)</Text>
+            </TouchableOpacity>
+            {photo && (
+              <View style={{ marginTop: 20, alignItems: 'center' }}>
+                <Image source={{ uri: photo }} style={styles.imagePreview} />
+                <TouchableOpacity
+                  style={[styles.buttonStyle, { backgroundColor: '#dc3545', marginTop: 10 }]} // Red button for "Remove Photo"
+                  onPress={() => setPhoto(null)} // Reset the photo state
+                >
+                  <Text style={styles.buttonTextStyle}>Remove Photo</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+          <View style={{ marginTop: 20 }}>
+            <Text style={styles.text}>Describe the Issue</Text>
+            <TextInput
+              style={styles.textArea}
+              placeholder="Describe the issue in detail"
+              value={description}
+              onChangeText={(text) => setDescription(text)}
+              multiline={true}
+              numberOfLines={4}
             />
           </View>
-          {photo && <Image source={{ uri: photo }} style={styles.imagePreview} />}
           <View style={{ marginTop: 30 }}>
-            <Button 
-              title="Review Submission" 
-              onPress={handleReview} 
-            />
+            <TouchableOpacity style={styles.buttonStyle} onPress={handleReview}>
+              <Text style={styles.buttonTextStyle}>Review Submission</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
