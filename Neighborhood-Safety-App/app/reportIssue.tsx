@@ -264,9 +264,9 @@ export default function ReportScreen() {
 
   const [submissionMessage, setSubmissionMessage] = useState("");
   const [submissionMessageColor, setSubmissionMessageColor] = useState("#000"); // Default color
+  const [isSubmitting, setIsSubmitting] = useState(false); // Track submission status
 
   const handleSubmit = async () => {
-      
     
     try {
 
@@ -296,14 +296,13 @@ export default function ReportScreen() {
         description,
         photoUri, // Cloudinary URL of the uploaded image
       };
-
-      console.log("Submitting Report with Location:", geoLocation);
   
       const response = await axios.post('https://neighborhood-safety-backend.vercel.app/api/reports', reportData);
   
       setSubmissionMessage("Report submitted successfully!\nRedirecting to homepage...");
       setSubmissionMessageColor("#28a745")
-      console.log(response.data);
+
+      setIsSubmitting(true);
   
       // Close the modal after a delay
       setTimeout(() => {
@@ -454,12 +453,19 @@ export default function ReportScreen() {
                 <Image source={{ uri: photo }} style={styles.imagePreview} />
               </>
             )}
-            <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
-              <Text style={styles.closeButtonText}>Close</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-              <Text style={styles.submitButtonText}>Submit Report</Text>
-            </TouchableOpacity>
+            
+            {/* Conditionally render buttons */}
+            {!isSubmitting && (
+              <>
+                <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                  <Text style={styles.submitButtonText}>Submit Report</Text>
+                </TouchableOpacity>
+              </>
+            )}
+
             {/* Display the submission message */}
             {submissionMessage ? (
               <Text style={[styles.submissionMessage, { color: submissionMessageColor }]}>
