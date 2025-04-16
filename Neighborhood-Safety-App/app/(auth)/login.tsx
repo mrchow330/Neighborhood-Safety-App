@@ -5,10 +5,13 @@ import React, { useState } from 'react';
 export default function LoginScreen() {
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
+
+   const handleLogin=()=>{
+    console.log('Logging in...');
+   }
    return (
       <View style={styles.container}>
         <Text style={styles.header}>Welcome Back.</Text>
-        <Text style={styles.text}>Existing User</Text>
         {/* Email Input */}
         <TextInput
           style={styles.input}
@@ -27,7 +30,8 @@ export default function LoginScreen() {
         />
         <View>
             <Button label="Login" targetScreen="login"
-            style={{ height: '80%'}} // Override button styles
+            style={{ height: '80%', width: '100%'}} // Override button styles
+            onPress={handleLogin}
             />
         </View>
         {/* Forgot Password */}
@@ -66,13 +70,24 @@ const styles = StyleSheet.create({
   header:{
     fontSize: 30,
     textAlign: 'center',
-    marginBottom: 5,
+    marginBottom: 20,
     color: '#1e3a8a',
   },
   image:{
     width: 200, // Set a fixed width
     height: 200, // Set a fixed height
     resizeMode: 'contain', 
+  },
+  input: {
+    width: '39%',
+    padding: 15,
+    borderColor: '#d1d5db',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 15,
+    backgroundColor: 'white',
+    fontSize: 16,
+    fontStyle: 'italic',
   },
   forgotPassword: {
     color: '#1e3a8a',
