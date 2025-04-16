@@ -9,16 +9,24 @@ type Props = {
   targetScreen: keyof RootStackParamList;  // Ensure the targetScreen is typed
   style? : StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+  onPress?: ()=> void;
 };
 
 
-export default function Button({ label, targetScreen, style, textStyle}: Props) {
+export default function Button({ label, targetScreen, style, textStyle, onPress}: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const handlePress = () => {
+    if (onPress) {
+      onPress(); // Execute the custom onPress function if provided
+    } else if (targetScreen) {
+      navigation.navigate(targetScreen);
+    }
+  };
 
   return (
     <View style={styles.buttonContainer}>
-      <Pressable style={[styles.button, style]} onPress=
-      {() => navigation.navigate(targetScreen)}>
+      <Pressable style={[styles.button, style]} onPress={handlePress}>
         <Text style={[styles.buttonLabel, textStyle]}>{label}</Text>
       </Pressable>
     </View>
