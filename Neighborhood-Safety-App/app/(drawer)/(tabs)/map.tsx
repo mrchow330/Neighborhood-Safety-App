@@ -37,13 +37,13 @@ function MyComponent() {
     setMap(null)
   }, [])
 
-  google.maps.event.addListener(map, 'click', function(event)) {
+  google.maps.event.addListener(map, 'click', function(event) {
+    // Create a new marker at the clicked location
     const marker = new google.maps.Marker({
       position: event.latLng,
-      map: map,
+      map: map, // Set the map for the marker
     });
-
-  }
+  });
 
   return isLoaded ? (
     <GoogleMap
