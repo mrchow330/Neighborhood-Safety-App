@@ -55,6 +55,8 @@ export type RootStackParamList = {
   reports: undefined;  
   account: undefined;  
   communityGuidlines : undefined;
+  login: undefined;
+  'sign-up': undefined;
 };
 
 
