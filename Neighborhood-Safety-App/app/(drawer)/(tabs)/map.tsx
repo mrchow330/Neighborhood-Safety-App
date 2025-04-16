@@ -3,7 +3,7 @@ import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 import { GOOGLE_MAPS_API_KEY } from '../../../config';
 
 const containerStyle = {
-  width: '1530px',
+  width: '1535px',
   height: '1000px',
 }
 
@@ -36,6 +36,14 @@ function MyComponent() {
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null)
   }, [])
+
+  google.maps.event.addListener(map, 'click', function(event)) {
+    const marker = new google.maps.Marker({
+      position: event.latLng,
+      map: map,
+    });
+
+  }
 
   return isLoaded ? (
     <GoogleMap
