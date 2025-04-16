@@ -1,24 +1,80 @@
-import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity} from 'react-native';
+import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, Alert} from 'react-native';
 import Button from '@/components/Button';
 import React, { useState } from 'react';
 
 export default function LoginScreen() {
-   const [email, setEmail] = useState('');
+   const [username, setUsername] = useState('');
    const [password, setPassword] = useState('');
+   const [errorMessage, setErrorMessage] = useState('');
+   const [successMessage, setSuccessMessage] = useState('');
 
-   const handleLogin=()=>{
-    console.log('Logging in...');
-   }
+   const handleLogin= async ()=>{
+    setErrorMessage('');
+    setSuccessMessage(''); // Clear any previous success messages
+
+    if (!username || !password) {
+      setErrorMessage('Username and password are required.');
+      return;
+    }
+
+    const adminCredentials = {
+      username: username,
+      password: password,
+    };
+
+    try {
+      const response = await fetch('https://neighborhood-safety-backend.vercel.app/api/admin/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(adminCredentials),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage(data.message); // "Login successful"
+        console.log('Admin login successful:', data);
+        Alert.alert('Success', data.message, [
+          { text: 'OK', onPress: () => {
+            // Handle navigation to the admin dashboard or next screen
+            console.log('Navigating to admin dashboard');
+          }},
+        ]);
+        // Optionally, store authentication tokens or session information here
+        setUsername('');
+        setPassword('');
+      } else if (response.status === 404) {
+        setErrorMessage(data.error || 'User not found.');
+        Alert.alert('Error', data.error || 'User not found.');
+      } else if (response.status === 403) {
+        setErrorMessage(data.error || 'Access denied. Admins only.');
+        Alert.alert('Error', data.error || 'Access denied. Admins only.');
+      } else if (response.status === 401) {
+        setErrorMessage(data.error || 'Invalid credentials.');
+        Alert.alert('Error', data.error || 'Invalid credentials.');
+      } else {
+        setErrorMessage(data.error || 'Admin login failed. Please try again.');
+        Alert.alert('Error', data.error || 'Admin login failed. Please try again.');
+        console.error('Admin login error:', data);
+      }
+    } catch (error) {
+      setErrorMessage('Network error. Please check your connection and try again.');
+      Alert.alert('Error', 'Network error. Please check your connection and try again.');
+      console.error('Admin login network error:', error);
+    }
+   };
    return (
       <View style={styles.container}>
         <Text style={styles.header}>Welcome Back.</Text>
         {/* Email Input */}
         <TextInput
           style={styles.input}
-          placeholder="Email"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={setEmail}
+          placeholder="Username"
+          keyboardType="default"
+          value={username}
+          onChangeText={setUsername}
         />
         {/* Password Input */}
         <TextInput
@@ -79,7 +135,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain', 
   },
   input: {
-    width: '39%',
+    width: '20%',
+    minWidth: 300,
     color: '#1e3a8a',
     padding: 15,
     borderColor: '#d1d5db',
@@ -88,7 +145,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: 'white',
     fontSize: 16,
-    fontStyle: 'italic',
   },
   forgotPassword: {
     color: '#1e3a8a',
