@@ -26,11 +26,11 @@ export default function SignInScreen() {
         <Text style={styles.text}>Stay informed, report issues, and keep your community safe.</Text>
         <View>
             <Button label="Login" targetScreen="login"
-            onPress={() => console.log('Overridden pressed')}
-            style={{ backgroundColor: 'green', borderRadius: 10 }} // Override button styles
-            textStyle={{ fontSize: 18, color: 'yellow' }} // Override text styles
             />
-            <Button label="Sign Up" targetScreen="sign-up"/>
+            <Button label="Sign Up" targetScreen="sign-up"
+            style={{ backgroundColor: 'white', borderColor: '#1e3a8a', borderWidth: 1}} // Override button styles
+            textStyle={{ color: '#1e3a8a'}} // Override text styles
+            />
         </View>
     </View>
   );
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: '#1E293B',
+    color: '#1e3a8a',
     fontFamily: 'Nunito_400Regular',
     fontSize: 16,
     width: '40%',
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   header:{
     fontSize: 30,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 5,
     color: '#1e3a8a',
     fontWeight: 'bold',
   },
@@ -65,19 +65,5 @@ const styles = StyleSheet.create({
     width: 200, // Set a fixed width
     height: 200, // Set a fixed height
     resizeMode: 'contain', 
-  },
-  button: {
-    borderRadius: 10,
-    width: '90%',
-    height: '90%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    backgroundColor: "#1e3a8a"
-  },
-  buttonLabel: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 18,
   },
 });

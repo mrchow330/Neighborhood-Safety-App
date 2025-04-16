@@ -1,8 +1,5 @@
 import { View, StyleSheet } from 'react-native';
 import { Link, Stack } from 'expo-router';
-import { useFonts } from 'expo-font';
-import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
-
 export default function SignUpScreen() {
   return (
     <>
