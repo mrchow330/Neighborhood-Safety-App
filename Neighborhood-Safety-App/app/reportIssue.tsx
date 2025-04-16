@@ -399,9 +399,9 @@ export default function ReportScreen() {
               </GoogleMap>
             </View>
           )}
-          {geoLocation && (
+          {geoLocation && geoLocation.coordinates && (
             <Text style={styles.text}>
-              Selected Location: Lat: {mapLocation.lat}, Lng: {mapLocation.lng}
+              Selected Location: Lat: {geoLocation.coordinates[1]}, Lng: {geoLocation.coordinates[0]}
             </Text>
           )}
           <View style={{ marginTop: 20 }}>
