@@ -174,6 +174,8 @@ export default function ReportScreen() {
   const [geoLocation, setGeoLocation] = useState(null); 
   const [mapLocation, setMapLocation] = useState(center); 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [markerPosition, setMarkerPosition] = useState(center); 
+  const [mapCenter, setMapCenter] = useState(center); 
 
   const router = useRouter(); 
 
@@ -190,8 +192,9 @@ export default function ReportScreen() {
           type: "Point",
           coordinates: [longitude, latitude], // GeoJSON format: [longitude, latitude]
         };
-        setGeoLocation(geoJsonLocation); 
-        setMapLocation({ lat: latitude, lng: longitude }); 
+        setGeoLocation(geoJsonLocation);
+        setMarkerPosition({ lat: latitude, lng: longitude }); // Update the marker position
+        setMapCenter({ lat: latitude, lng: longitude }); // Update the map center
         console.log("User's Current Location:", geoJsonLocation); // Debugging
       },
       (error) => {
@@ -201,8 +204,6 @@ export default function ReportScreen() {
     );
   };
 
-  
-
   const handleMapClick = (event) => {
     const { lat, lng } = event.latLng.toJSON();
     const geoJsonLocation = {
@@ -211,7 +212,7 @@ export default function ReportScreen() {
     };
     console.log("Selected Location:", geoJsonLocation); // Debugging
     setGeoLocation(geoJsonLocation); // Update the GeoJSON location state
-    setMapLocation({ lat, lng }); // Update the map marker
+    setMarkerPosition({ lat, lng }); // Update the marker position only
   };
 
   const pickImage = async () => {
@@ -389,17 +390,17 @@ export default function ReportScreen() {
             <View style={styles.mapContainer}>
               <GoogleMap
                 mapContainerStyle={styles.mapContainer}
-                center={mapLocation}
+                center={mapCenter} // Use mapCenter for the map's center
                 zoom={15}
                 onClick={handleMapClick}
               >
-                <Marker position={mapLocation} />
+                <Marker position={markerPosition} /> {/* Use markerPosition for the marker */}
               </GoogleMap>
             </View>
           )}
           {geoLocation && (
             <Text style={styles.text}>
-              Selected Location: Lat {mapLocation.lat}, Lng {mapLocation.lng}
+              Selected Location: Lat: {mapLocation.lat}, Lng: {mapLocation.lng}
             </Text>
           )}
           <View style={{ marginTop: 20 }}>
