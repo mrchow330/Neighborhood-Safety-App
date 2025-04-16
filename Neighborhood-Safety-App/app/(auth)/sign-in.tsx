@@ -15,7 +15,7 @@ export default function SignInScreen() {
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Welcome to {"\n"} HoodWatch</Text>
+      <Text style={styles.header}>Welcome to HoodWatch</Text>
       <Image
         style={styles.image}
         source={require('../../assets/images/temp-logo.png')}
