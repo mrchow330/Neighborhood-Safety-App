@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-
 export default function ReportScreen() {
   const [selectedIssue, setSelectedIssue] = useState("");
   return (

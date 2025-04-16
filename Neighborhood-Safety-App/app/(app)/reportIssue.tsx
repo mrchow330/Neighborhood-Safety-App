@@ -6,6 +6,8 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
+import { useFonts } from 'expo-font';
+import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
 
 // Define styles at the top
 const styles = StyleSheet.create({

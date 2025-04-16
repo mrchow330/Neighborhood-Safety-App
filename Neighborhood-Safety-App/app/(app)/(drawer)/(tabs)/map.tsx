@@ -1,6 +1,5 @@
 import React from 'react'
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
-
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { GOOGLE_MAPS_API_KEY } from '../../../config';
 
 const containerStyle = {
