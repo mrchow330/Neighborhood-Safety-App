@@ -9,15 +9,3 @@ export default function AuthLayout() {
     </Stack>
   );
 }
-
-export type RootStackParamList = {
-    "(tabs)": undefined;  // This screen has no parameters
-    "+not-found": undefined;  
-    about: undefined;  
-    reportIssue: undefined;  
-    index: undefined;  
-    map: undefined;  
-    reports: undefined;  
-    account: undefined;  
-    communityGuidlines : undefined;
-  };
