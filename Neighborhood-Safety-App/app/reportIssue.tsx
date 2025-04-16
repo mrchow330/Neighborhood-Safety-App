@@ -427,7 +427,6 @@ export default function ReportScreen() {
             )}
           </View>
           <View style={{ marginTop: 20 }}>
-            <Text style={styles.text}>Describe the Issue</Text>
             <TextInput
               style={styles.textArea}
               placeholder="Describe the issue in detail"
