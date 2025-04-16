@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     marginBottom: 20,
-    paddingTop: 90,
+    paddingTop: 100,
     color: '#1e3a8a',
   },
   image:{
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
-    paddingBottom: 40,
+    paddingBottom: 100,
   },
   haveAccountText: {
     color: '#1e3a8a',
