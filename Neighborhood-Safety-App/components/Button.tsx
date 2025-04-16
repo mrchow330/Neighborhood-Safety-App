@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Pressable, Text } from 'react-native';
+import { StyleSheet, StyleProp, ViewStyle, TextStyle, View, Pressable, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';  
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';  // For proper typing
 import { RootStackParamList } from '../app/(app)/_layout'; 
@@ -7,17 +7,19 @@ import { RootStackParamList } from '../app/(app)/_layout';
 type Props = {
   label: string;
   targetScreen: keyof RootStackParamList;  // Ensure the targetScreen is typed
+  style? : StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
 };
 
 
-export default function Button({ label, targetScreen}: Props) {
+export default function Button({ label, targetScreen, style, textStyle}: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
     <View style={styles.buttonContainer}>
-      <Pressable style={styles.button} onPress=
+      <Pressable style={[styles.button, style]} onPress=
       {() => navigation.navigate(targetScreen)}>
-        <Text style={styles.buttonLabel}>{label}</Text>
+        <Text style={[styles.buttonLabel, textStyle]}>{label}</Text>
       </Pressable>
     </View>
   );
@@ -34,8 +36,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 10,
-    width: '100%',
-    height: '100%',
+    width: '90%',
+    height: '90%',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
