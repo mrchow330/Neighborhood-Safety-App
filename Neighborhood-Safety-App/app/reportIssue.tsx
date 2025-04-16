@@ -210,9 +210,10 @@ export default function ReportScreen() {
       type: "Point",
       coordinates: [lng, lat], // GeoJSON format: [longitude, latitude]
     };
-    console.log("Selected Location:", geoJsonLocation); // Debugging
-    setGeoLocation(geoJsonLocation); // Update the GeoJSON location state
-    setMarkerPosition({ lat, lng }); // Update the marker position only
+    console.log("Selected Location:", geoJsonLocation);
+    setGeoLocation(geoJsonLocation); 
+    setMarkerPosition({ lat, lng }); 
+    setMapLocation({ lat, lng });
   };
 
   const pickImage = async () => {
