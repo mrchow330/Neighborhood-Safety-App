@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
 // Define styles at the top
 const styles = StyleSheet.create({
@@ -39,14 +40,14 @@ const styles = StyleSheet.create({
     color: '#1E293B',
   },
   textArea: {
+    margin: 20,
     height: 100,
-    width: 250,
+    width: 750,
     borderColor: '#CBD5E1',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 10,
-    marginBottom: 20,
     color: '#1E293B',
     textAlignVertical: 'top', // Ensures text starts at the top of the text area
   },
@@ -81,6 +82,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   boldText: {
+    fontWeight: 'bold',
+  },
+  buttonStyle: {
+    backgroundColor: '#1E293B',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  buttonTextStyle: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    textAlign: 'center',
     fontWeight: 'bold',
   },
   closeButton: {
@@ -124,37 +139,82 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 7,
     textAlign: 'center',
+  },
+  mapContainer: {
+    width: '100%',
+    height: 300,
+    marginBottom: 20,
+  },
+  mapSnapshotContainer: {
+    width: '100%',
+    height: 200,
+    marginTop: 10,
+    borderRadius: 10,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+  },
+  mapSnapshot: {
+    width: '100%',
+    height: '100%',
   }
 });
 
-const [geoLocation, setGeoLocation] = useState(null); // For storing GeoJSON location
-const [location, setLocation] = useState("");
 
-const fetchUserLocation = () => {
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const { latitude, longitude } = position.coords;
-      setGeoLocation({
-        type: "Point",
-        coordinates: [longitude, latitude], // GeoJSON format: [longitude, latitude]
-      });
-      setLocation(`Lat: ${latitude}, Lng: ${longitude}`); // Optional: Update the location text input
-    },
-    (error) => {
-      console.error("Error fetching location:", error);
-      alert("Unable to fetch your location. Please enable location services.");
-    }
-  );
+const center = {
+  lat: 40.698, // Default latitude
+  lng: -89.615, // Default longitude
 };
 
 export default function ReportScreen() {
-  const [selectedIssue, setSelectedIssue] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
+  const [selectedIssue, setSelectedIssue] = useState('');
+  const [location, setLocation] = useState('');
+  const [description, setDescription] = useState('');
   const [photo, setPhoto] = useState(null);
+  const [geoLocation, setGeoLocation] = useState(null); 
+  const [mapLocation, setMapLocation] = useState(center); 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [markerPosition, setMarkerPosition] = useState(center); 
+  const [mapCenter, setMapCenter] = useState(center); 
 
-  const router = useRouter(); // Use useRouter at the top level
+  const router = useRouter(); 
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: 'AIzaSyCDnW55eORWwd5nOQZ5PPDygxtNljP_fYY',
+  });
+
+  const fetchUserLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const geoJsonLocation = {
+          type: "Point",
+          coordinates: [longitude, latitude], // GeoJSON format: [longitude, latitude]
+        };
+        setGeoLocation(geoJsonLocation);
+        setMarkerPosition({ lat: latitude, lng: longitude }); // Update the marker position
+        setMapCenter({ lat: latitude, lng: longitude }); // Update the map center
+        console.log("User's Current Location:", geoJsonLocation); // Debugging
+      },
+      (error) => {
+        console.error("Error fetching location:", error);
+        alert("Unable to fetch your location. Please enable location services.");
+      }
+    );
+  };
+
+  const handleMapClick = (event) => {
+    const { lat, lng } = event.latLng.toJSON();
+    const geoJsonLocation = {
+      type: "Point",
+      coordinates: [lng, lat], // GeoJSON format: [longitude, latitude]
+    };
+    console.log("Selected Location:", geoJsonLocation);
+    setGeoLocation(geoJsonLocation); 
+    setMarkerPosition({ lat, lng }); 
+    setMapLocation({ lat, lng });
+  };
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -221,9 +281,18 @@ export default function ReportScreen() {
 
   const [submissionMessage, setSubmissionMessage] = useState("");
   const [submissionMessageColor, setSubmissionMessageColor] = useState("#000"); // Default color
+  const [isSubmitting, setIsSubmitting] = useState(false); // Track submission status
 
   const handleSubmit = async () => {
+    
     try {
+
+      // Validate that a location has been selected
+      if (!geoLocation || !geoLocation.coordinates || geoLocation.coordinates.length !== 2) {
+        alert("Please select a location on the map.");
+        return;
+      }
+
       const reportId = uuidv4(); // Generate a unique ID for the report
       let photoUri = null;
   
@@ -238,24 +307,19 @@ export default function ReportScreen() {
       }
   
       const reportData = {
-        report_id: reportId, // Include the unique report ID in the report data
+        report_id: reportId,
         issueType: selectedIssue,
-        location: geoLocation || { type: "Point", coordinates: [] },
+        location: geoLocation || { type: 'Point', coordinates: [] }, // Use GeoJSON location
         description,
-        photoUri, // This will contain the Cloudinary URL of the uploaded image
+        photoUri, // Cloudinary URL of the uploaded image
       };
   
       const response = await axios.post('https://neighborhood-safety-backend.vercel.app/api/reports', reportData);
   
       setSubmissionMessage("Report submitted successfully!\nRedirecting to homepage...");
       setSubmissionMessageColor("#28a745")
-      console.log(response.data);
-  
-      // Clear the form after submission
-      setSelectedIssue('');
-      setLocation('');
-      setDescription('');
-      setPhoto(null);
+
+      setIsSubmitting(true);
   
       // Close the modal after a delay
       setTimeout(() => {
@@ -310,7 +374,7 @@ export default function ReportScreen() {
         <Picker
           selectedValue={selectedIssue}
           onValueChange={(itemValue) => setSelectedIssue(itemValue)}
-          style={[styles.picker, { marginTop: 20 }]} // Correctly combines styles
+          style={[styles.picker, { marginTop: 20 }]}
         >
           <Picker.Item label="Select an issue type" value="" />
           <Picker.Item label="Pothole/Road Damage" value="pothole" />
@@ -319,39 +383,64 @@ export default function ReportScreen() {
           <Picker.Item label="Other" value="other" />
         </Picker>
 
-        {/* Add spacing below the dropdown */}
         <View style={{ marginTop: 30 }}>
+
           {/* Form Section */}
-          <Text style={styles.text}>Fill out the fields below to submit your report</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Enter location of the issue or use 'Use My Location'"
-            value={location} // This will now reflect the updated location
-            onChangeText={(text) => setLocation(text)} // Allow manual updates as well
-          />
-          <View style={{ marginTop: 17 }}>
-            <Button title="Use My Location" onPress={fetchUserLocation} />
+          <Text style={styles.text}>Select Location on the Map or press "Use My Location"</Text>
+          {isLoaded && (
+            <View style={styles.mapContainer}>
+              <GoogleMap
+                mapContainerStyle={styles.mapContainer}
+                center={mapCenter} // Use mapCenter for the map's center
+                zoom={15}
+                onClick={handleMapClick}
+              >
+                <Marker position={markerPosition} /> {/* Use markerPosition for the marker */}
+              </GoogleMap>
+            </View>
+          )}
+          {geoLocation && geoLocation.coordinates && (
+            <Text style={styles.text}>
+              Selected Location: Lat: {geoLocation.coordinates[1]}, Lng: {geoLocation.coordinates[0]}
+            </Text>
+          )}
+          <View style={{ marginTop: 20 }}>
+            <TouchableOpacity style={styles.buttonStyle} onPress={fetchUserLocation}>
+              <Text style={styles.buttonTextStyle}>Use My Location</Text>
+            </TouchableOpacity>
           </View>
-          <TextInput
-            style={styles.textArea}
-            placeholder="Describe the issue in detail"
-            value={description}
-            onChangeText={(text) => setDescription(text)}
-            multiline={true}
-            numberOfLines={4}
-          />
-          <View style={{ marginTop: 50 }}>
-            <Button 
-              title="Upload Photo (Optional)" 
-              onPress={pickImage} 
+
+          <View style={{ marginTop: 20 }}>
+            <TouchableOpacity style={styles.buttonStyle} onPress={pickImage}>
+              <Text style={styles.buttonTextStyle}>Upload Photo (Optional)</Text>
+            </TouchableOpacity>
+            {photo && (
+              <View style={{ marginTop: 20, alignItems: 'center' }}>
+                <Image source={{ uri: photo }} style={styles.imagePreview} />
+                <TouchableOpacity
+                  style={[styles.buttonStyle, { backgroundColor: '#dc3545', marginTop: 10 }]} // Red button for "Remove Photo"
+                  onPress={() => setPhoto(null)} // Reset the photo state
+                >
+                  <Text style={styles.buttonTextStyle}>Remove Photo</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+          <View style={{ marginTop: 20 }}>
+            <Text style={styles.text}>Describe the Issue</Text>
+            <TextInput
+              style={styles.textArea}
+              placeholder="Describe the issue in detail"
+              value={description}
+              onChangeText={(text) => setDescription(text)}
+              multiline={true}
+              numberOfLines={4}
             />
           </View>
-          {photo && <Image source={{ uri: photo }} style={styles.imagePreview} />}
           <View style={{ marginTop: 30 }}>
-            <Button 
-              title="Review Submission" 
-              onPress={handleReview} 
-            />
+            <TouchableOpacity style={styles.buttonStyle} onPress={handleReview}>
+              <Text style={styles.buttonTextStyle}>Review Submission</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -368,8 +457,25 @@ export default function ReportScreen() {
               <Text style={styles.boldText}>Issue Type:</Text> {selectedIssue || "Not selected"}
             </Text>
             <Text style={styles.modalText}>
-              <Text style={styles.boldText}>Location:</Text> {location || "Not provided"}
+              <Text style={styles.boldText}>Location:</Text>{' '}
+              {geoLocation ? `Lat: ${mapLocation.lat}, Lng: ${mapLocation.lng}` : 'Not provided'}
             </Text>
+
+            {geoLocation && (
+              <View style={styles.mapSnapshotContainer}>
+                <GoogleMap
+                  mapContainerStyle={styles.mapSnapshot}
+                  center={mapLocation}
+                  zoom={15}
+                  options={{
+                    disableDefaultUI: true, // Hide default controls for a cleaner snapshot
+                    draggable: false, // Disable dragging
+                  }}
+                >
+                  <Marker position={mapLocation} />
+                </GoogleMap>
+              </View>
+            )}
             <Text style={styles.modalText}>
               <Text style={styles.boldText}>Description:</Text> {description || "Not provided"}
             </Text>
@@ -381,12 +487,19 @@ export default function ReportScreen() {
                 <Image source={{ uri: photo }} style={styles.imagePreview} />
               </>
             )}
-            <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
-              <Text style={styles.closeButtonText}>Close</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-              <Text style={styles.submitButtonText}>Submit Report</Text>
-            </TouchableOpacity>
+            
+            {/* Conditionally render buttons */}
+            {!isSubmitting && (
+              <>
+                <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                  <Text style={styles.submitButtonText}>Submit Report</Text>
+                </TouchableOpacity>
+              </>
+            )}
+
             {/* Display the submission message */}
             {submissionMessage ? (
               <Text style={[styles.submissionMessage, { color: submissionMessageColor }]}>
