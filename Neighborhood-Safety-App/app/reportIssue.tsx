@@ -296,6 +296,8 @@ export default function ReportScreen() {
         description,
         photoUri, // Cloudinary URL of the uploaded image
       };
+
+      console.log("Submitting Report with Location:", geoLocation);
   
       const response = await axios.post('https://neighborhood-safety-backend.vercel.app/api/reports', reportData);
   
