@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity} from 'react-native';
+import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView} from 'react-native';
 import Button from '@/components/Button';
 import React, { useState } from 'react';
 
@@ -16,7 +16,7 @@ export default function CreateAccountScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.scrollViewContainer} contentContainerStyle={styles.container}>
       <Text style={styles.header}>Create an Account</Text>
       <Text style={styles.text}>Please fill out fields.</Text>
 
@@ -67,7 +67,7 @@ export default function CreateAccountScreen() {
         onChangeText={setConfirmPassword}
       />
       <View>
-          <Button label="Login" targetScreen="login"
+          <Button label="Sign Up" targetScreen="login"
           style={{ height: '80%', width: '100%'}} // Override button styles
           onPress={handleSignUp}
           />
@@ -75,15 +75,19 @@ export default function CreateAccountScreen() {
       <View style={styles.loginContainer}>
         <Text style={styles.haveAccountText}>Have an account?</Text>
         <TouchableOpacity >
-          <Text style={styles.loginLink}>Login</Text>
+          <Text style={styles.loginLink}> Login</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 
 const styles = StyleSheet.create({
+  scrollViewContainer: {
+    flex: 1, // Make the ScrollView take up the entire screen
+    backgroundColor: '#F8FAFC',
+  },
   container: {
     flex: 1,
     backgroundColor: '#F8FAFC',
@@ -105,6 +109,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     marginBottom: 20,
+    paddingTop: 90,
     color: '#1e3a8a',
   },
   image:{
@@ -127,10 +132,11 @@ const styles = StyleSheet.create({
   loginContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10,
+    paddingBottom: 40,
   },
   haveAccountText: {
-    color: '#4b5563',
+    color: '#1e3a8a',
     fontSize: 14,
   },
   loginLink: {
