@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 30,
     width: '10%',
+    minWidth: 150,
     borderRadius: 8,
   },
   logoutText: {

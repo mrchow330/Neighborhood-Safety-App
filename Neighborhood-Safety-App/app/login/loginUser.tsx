@@ -1,8 +1,10 @@
-import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, Alert} from 'react-native';
+import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, Alert, Keyboard} from 'react-native';
 import Button from '@/components/Button';
-import React, { useState} from 'react';
+import React, { useState, useRef} from 'react';
 import {useRouter} from 'expo-router';
 import { useAuthSession } from '@/providers/AuthProvider';
+import type {ElementRef} from 'react';
+import type {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 
 export default function LoginScreen() {
    const [username, setUsername] = useState('');
@@ -12,9 +14,12 @@ export default function LoginScreen() {
    const {signIn} = useAuthSession();
    const router=useRouter();
 
+   const passwordInputRef = useRef<ElementRef<typeof TextInput>>(null);
+
    const handleLogin= async ()=>{
     setErrorMessage('');
     setSuccessMessage(''); 
+    Keyboard.dismiss();
 
     if (!username || !password) {
       setErrorMessage('Username and password are required.');
@@ -81,6 +86,10 @@ export default function LoginScreen() {
           keyboardType="default"
           value={username}
           onChangeText={setUsername}
+          onSubmitEditing={() => {
+            passwordInputRef.current?.focus();
+          }}
+          returnKeyType="next"
         />
         {/* Password Input */}
         <TextInput
@@ -90,6 +99,8 @@ export default function LoginScreen() {
           secureTextEntry={true}
           value={password}
           onChangeText={setPassword}
+          onSubmitEditing={handleLogin}
+          returnKeyType="go"
         />
         <View>
             <Button label="Login" targetScreen="loginUser"
