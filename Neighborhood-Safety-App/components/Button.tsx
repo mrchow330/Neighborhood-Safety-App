@@ -1,23 +1,33 @@
 import React from 'react';
-import { StyleSheet, View, Pressable, Text } from 'react-native';
+import { StyleSheet, StyleProp, ViewStyle, TextStyle, View, Pressable, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';  
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';  // For proper typing
-import { RootStackParamList } from '../app/_layout'; 
+import { RootStackParamList } from '../app/(authorized)/_layout'; 
 
 type Props = {
   label: string;
   targetScreen: keyof RootStackParamList;  // Ensure the targetScreen is typed
+  style? : StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
+  onPress?: ()=> void;
 };
 
 
-export default function Button({ label, targetScreen}: Props) {
+export default function Button({ label, targetScreen, style, textStyle, onPress}: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const handlePress = () => {
+    if (onPress) {
+      onPress(); // Execute the custom onPress function if provided
+    } else if (targetScreen) {
+      navigation.navigate(targetScreen);
+    }
+  };
 
   return (
     <View style={styles.buttonContainer}>
-      <Pressable style={styles.button} onPress=
-      {() => navigation.navigate(targetScreen)}>
-        <Text style={styles.buttonLabel}>{label}</Text>
+      <Pressable style={[styles.button, style]} onPress={handlePress}>
+        <Text style={[styles.buttonLabel, textStyle]}>{label}</Text>
       </Pressable>
     </View>
   );
@@ -34,8 +44,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 10,
-    width: '100%',
-    height: '100%',
+    width: '90%',
+    height: '90%',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
