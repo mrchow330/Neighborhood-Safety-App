@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
 import { Image } from 'expo-image';
 import Button from '@/components/Button';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 export default function Index() {
   const blurhash =
@@ -35,6 +36,7 @@ export default function Index() {
         <Button label="My Reports" targetScreen="reports"/>
         <Button label="View Live Map" targetScreen="map"/>
       </View>
+      <SpeedInsights />
     </View>
   );
 }
