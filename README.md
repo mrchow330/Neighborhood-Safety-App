@@ -27,7 +27,6 @@ This app uses the following technologies and libraries:
 - [mongoose](https://mongoosejs.com/) (for connecting to and interacting with the MongoDB database)
 - [dotenv](https://www.npmjs.com/package/dotenv) (for managing environment variables securely)
 - [cors](https://www.npmjs.com/package/cors) (for enabling cross-origin resource sharing)
-- 
 
 ### In the future:
 - Google Maps API.
