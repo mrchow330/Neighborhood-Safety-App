@@ -234,7 +234,10 @@ return (
           <View key={index} style={styles.reportItem}>
             <View style={styles.rowBetween}>
               <Text style={styles.reportLabel}>Issue Type: <Text style={styles.reportValue}>{report.issueType}</Text></Text>
-              <Text style={styles.reportLabel}>Submitted at: <Text style={styles.reportValue}>{report.createdAt}</Text></Text>
+              <Text style={styles.reportLabel}>Submitted at: <Text style={styles.reportValue}>
+                {new Date(report.createdAt).toISOString().split("T")[0]} {/* Format the date */}
+              </Text>
+            </Text>
             </View>
             <Text style={styles.reportLabel}>Status: <Text style={[styles.reportValue, { color: statusColors[report.status] || '#000' }]}>{report.status}</Text></Text>
             <TouchableOpacity onPress={() => toggleExpand(index)}>
