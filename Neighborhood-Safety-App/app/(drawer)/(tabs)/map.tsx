@@ -59,8 +59,10 @@
 
 
 import React from 'react'
+
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import { GOOGLE_MAPS_API_KEY } from '../../../config'
+
 
 const containerStyle = {
   width: '1535px',
@@ -117,4 +119,3 @@ function MyComponent() {
 }
 
 export default React.memo(MyComponent)
-
