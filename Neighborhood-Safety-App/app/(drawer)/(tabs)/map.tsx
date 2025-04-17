@@ -68,6 +68,15 @@ const containerStyle = {
   height: '1000px',
 };
 
+const statusColors = {
+  'Reviewed': '#16a34a',
+  'Submitted': '#22c55e',
+  'In Progress': '#f97316',
+  'Resolved': '#22c55e',
+  'Under Review': '#eab308',
+};
+
+
 const center = {
   lat: 40.698,
   lng: -89.615,
@@ -142,7 +151,15 @@ function MyComponent() {
           <div>
             <h3>Report Details</h3>
             <p><strong>Issue Type:</strong> {selectedReport.issueType}</p>
-            <p><strong>Status:</strong> {selectedReport.status}</p>
+            <p><strong>Status:</strong>{' '}
+              <span
+                style={{
+                  color: statusColors[selectedReport.status] || '#000', // Default to black if status is not found
+                }}
+              >
+                {selectedReport.status}
+              </span>
+            </p>
             <p><strong>Created At:</strong> {new Date(selectedReport.createdAt).toLocaleDateString()}</p>
           </div>
         </InfoWindow>
