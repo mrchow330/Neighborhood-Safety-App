@@ -233,8 +233,8 @@ return (
         {filteredReports.map((report, index) => (
           <View key={index} style={styles.reportItem}>
             <View style={styles.rowBetween}>
-              <Text style={styles.reportLabel}>Issue Type: <Text style={styles.reportValue}>{report.type}</Text></Text>
-              <Text style={styles.reportLabel}>Submitted at: <Text style={styles.reportValue}>{report.date}</Text></Text>
+              <Text style={styles.reportLabel}>Issue Type: <Text style={styles.reportValue}>{report.issueType}</Text></Text>
+              <Text style={styles.reportLabel}>Submitted at: <Text style={styles.reportValue}>{report.createdAt}</Text></Text>
             </View>
             <Text style={styles.reportLabel}>Status: <Text style={[styles.reportValue, { color: statusColors[report.status] || '#000' }]}>{report.status}</Text></Text>
             <TouchableOpacity onPress={() => toggleExpand(index)}>
@@ -245,12 +245,12 @@ return (
                 <Text style={styles.expandedLabel}>Location</Text>
                 <Text style={styles.expandedText}>{report.location}</Text>
                 {report.image && (
-  <Image
-    source={{ uri: report.image }}
-    style={styles.imagePlaceholder}
-    resizeMode="cover"
-  />
-)}
+                  <Image
+                    source={{ uri: report.image }}
+                    style={styles.imagePlaceholder}
+                    resizeMode="cover"
+                  />
+                )}
                 <Text style={styles.expandedLabel}>Description</Text>
                 <Text style={styles.expandedText}>{report.description}</Text>
               </View>
