@@ -1,10 +1,12 @@
 import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, Alert, Keyboard} from 'react-native';
 import Button from '@/components/Button';
 import React, { useState, useRef} from 'react';
-import {useRouter} from 'expo-router';
+// import {useRouter} from 'expo-router';
 import { useAuthSession } from '@/providers/AuthProvider';
 import type {ElementRef} from 'react';
-import type {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
+import { useNavigation } from '@react-navigation/native';  
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';  // For proper typing
+import { RootStackParamList } from '../(authorized)/_layout'; 
 
 export default function LoginScreen() {
    const [username, setUsername] = useState('');
@@ -12,10 +14,14 @@ export default function LoginScreen() {
    const [errorMessage, setErrorMessage] = useState('');
    const [successMessage, setSuccessMessage] = useState('');
    const {signIn} = useAuthSession();
-   const router=useRouter();
+  //  const router=useRouter();
 
    const passwordInputRef = useRef<ElementRef<typeof TextInput>>(null);
 
+   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+   const handleSignUpPress = ()=>{
+      navigation.navigate('sign-up');
+   }
    const handleLogin= async ()=>{
     setErrorMessage('');
     setSuccessMessage(''); 
@@ -26,25 +32,25 @@ export default function LoginScreen() {
       return;
     }
 
-    const adminCredentials = {
+    const userCredentials = {
       username: username,
       password: password,
     };
 
     try {
-      const response = await fetch('https://neighborhood-safety-backend.vercel.app/api/admin/login', {
+      const response = await fetch('https://neighborhood-safety-backend.vercel.app/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(adminCredentials),
+        body: JSON.stringify(userCredentials),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setSuccessMessage(data.message); 
-        console.log('login.tsx: Admin login successful:', data);
+        console.log('login.tsx: user login successful:', data);
         signIn(data._id?.$oid || data.uuid || data.authToken)
       //   Alert.alert('Success', data.message, [
       //     { text: 'OK', onPress: () => {
@@ -65,14 +71,14 @@ export default function LoginScreen() {
         setErrorMessage(data.error || 'Invalid credentials.');
         Alert.alert('Error', data.error || 'Invalid credentials.');
       } else {
-        setErrorMessage(data.error || 'Admin login failed. Please try again.');
-        Alert.alert('Error', data.error || 'Admin login failed. Please try again.');
-        console.error('Admin login error:', data);
+        setErrorMessage(data.error || 'User login failed. Please try again.');
+        Alert.alert('Error', data.error || 'User login failed. Please try again.');
+        console.error('User login error:', data);
       }
     } catch (error) {
       setErrorMessage('Network error. Please check your connection and try again.');
       Alert.alert('Error', 'Network error. Please check your connection and try again.');
-      console.error('Admin login network error:', error);
+      console.error('User login network error:', error);
     }
    };
    return (
@@ -115,7 +121,7 @@ export default function LoginScreen() {
         {/* Sign Up */}
         <View style={styles.signUpContainer}>
           <Text style={styles.dontHaveAccount}>Don't have an account?</Text>
-          <TouchableOpacity onPress={() => console.log('Sign up now')}>
+          <TouchableOpacity onPress={handleSignUpPress}>
             <Text style={styles.signUpLink}> Sign up now</Text>
           </TouchableOpacity>
         </View>
