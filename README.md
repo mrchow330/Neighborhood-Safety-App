@@ -1,4 +1,4 @@
-# Neighborhood-Safety-App
+# Neighborhood Safety App
 The neighborhood safety app is a community-driven software solution designed to enhance public safety and infrastructure management by providing residents with a platform to report and track local safety issues.
 See live web version here ➡️ [https://neighborhood-safety-app.vercel.app/](https://neighborhood-safety-app.vercel.app/)
 
@@ -20,6 +20,7 @@ This app uses the following technologies and libraries:
 - [EAS Build](https://docs.expo.dev/build/introduction/) (for building the app)
 - [React Navigation](https://reactnavigation.org/) (for navigation)
 - [Expo Router](https://expo.github.io/router/docs) (for file-based routing)
+- [Async Storage](https://react-native-async-storage.github.io/async-storage/docs/usage/) ( for storing data in local storage)
 
 ### Backend: 
 - [express](https://expressjs.com/) (for building the server and handling API routes)
