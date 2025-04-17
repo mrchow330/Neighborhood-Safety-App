@@ -1,19 +1,26 @@
 import { Redirect, Stack } from "expo-router";
-import {Text, StyleSheet} from "react-native";
-import {useSession} from '../../components/ctx'; 
+import {Text, StyleSheet, View} from "react-native";
+import {ReactNode} from "react";
+import {useAuthSession} from "@/providers/AuthProvider";
 
-export default function AppLayout(){
-  const {session, isLoading} = useSession();
+export default function AppLayout(): ReactNode{
+  const {token, isLoading, isAuthenticated} = useAuthSession();
 
   if (isLoading){
     //splash screen
     return <Text style={styles.text}>Loading...</Text>
   }
-
-  if (!session){
+  console.log('token check:', !token?.current);
+  console.log('isloading', isLoading)
+  if (!isAuthenticated){
     //redirect to sign in if not signed in
-    return <Redirect href="/sign-in"/>;
+    return <Redirect href="/login"/>;
   }
+  // return(
+  //   <View>
+  //     <Text>Commented out stack</Text>
+  //   </View>
+  // )
   return (
         <Stack>
           {/* Main drawer layout is the default */}
@@ -55,7 +62,7 @@ export type RootStackParamList = {
   reports: undefined;  
   account: undefined;  
   communityGuidlines : undefined;
-  login: undefined;
+  loginUser: undefined;
   'sign-up': undefined;
 };
 

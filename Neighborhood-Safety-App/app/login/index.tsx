@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font';
 import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
 
 
-export default function SignInScreen() {
+export default function LoginOptions() {
   const [fontsLoaded] = useFonts({
     Nunito_400Regular, // Load the regular font
     Nunito_700Bold,   // Load the bold font
@@ -25,7 +25,7 @@ export default function SignInScreen() {
     />
         <Text style={styles.text}>Stay informed, report issues, and keep your community safe.</Text>
         <View>
-            <Button label="Login" targetScreen="login"
+            <Button label="Login" targetScreen="loginUser"
             />
             <Button label="Sign Up" targetScreen="sign-up"
             style={{ backgroundColor: 'white', borderColor: '#1e3a8a', borderWidth: 1}} // Override button styles

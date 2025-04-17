@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, Alert} from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert} from 'react-native';
 import Button from '@/components/Button';
 import React, { useState } from 'react';
 
@@ -132,7 +132,7 @@ export default function CreateAccountScreen() {
         onChangeText={setConfirmPassword}
       /> */}
       <View>
-          <Button label="Sign Up" targetScreen="login"
+          <Button label="Sign Up" targetScreen="loginUser"
           style={{ height: '80%', width: '100%'}} // Override button styles
           onPress={handleSignUp}
           />

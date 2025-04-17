@@ -1,12 +1,11 @@
-import { Slot } from 'expo-router';
-import { SessionProvider } from '../components/ctx';
+import AuthProvider from "@/providers/AuthProvider";
+import {Slot} from "expo-router";
+import {ReactNode} from "react";
 
-export default function Root() {
-  // Set up the auth context and render our layout inside of it.
+export default function RootLayout(): ReactNode {
   return (
-    <SessionProvider>
+    <AuthProvider>
       <Slot />
-    </SessionProvider>
+    </AuthProvider>
   );
-  
 }

@@ -1,16 +1,20 @@
 import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, Alert} from 'react-native';
 import Button from '@/components/Button';
-import React, { useState } from 'react';
+import React, { useState} from 'react';
+import {useRouter} from 'expo-router';
+import { useAuthSession } from '@/providers/AuthProvider';
 
 export default function LoginScreen() {
    const [username, setUsername] = useState('');
    const [password, setPassword] = useState('');
    const [errorMessage, setErrorMessage] = useState('');
    const [successMessage, setSuccessMessage] = useState('');
+   const {signIn} = useAuthSession();
+   const router=useRouter();
 
    const handleLogin= async ()=>{
     setErrorMessage('');
-    setSuccessMessage(''); // Clear any previous success messages
+    setSuccessMessage(''); 
 
     if (!username || !password) {
       setErrorMessage('Username and password are required.');
@@ -34,15 +38,16 @@ export default function LoginScreen() {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccessMessage(data.message); // "Login successful"
-        console.log('Admin login successful:', data);
-        Alert.alert('Success', data.message, [
-          { text: 'OK', onPress: () => {
-            // Handle navigation to the admin dashboard or next screen
-            console.log('Navigating to admin dashboard');
-          }},
-        ]);
-        // Optionally, store authentication tokens or session information here
+        setSuccessMessage(data.message); 
+        console.log('login.tsx: Admin login successful:', data);
+        signIn(data._id?.$oid || data.uuid || data.authToken)
+      //   Alert.alert('Success', data.message, [
+      //     { text: 'OK', onPress: () => {
+      //       console.log('login.tsx: Calling signIn()', data._id?.$oid);
+      //       signIn(data._id?.$oid || data.uuid || data.authToken);
+      //     }},
+      //   ]
+      // );
         setUsername('');
         setPassword('');
       } else if (response.status === 404) {
@@ -87,7 +92,7 @@ export default function LoginScreen() {
           onChangeText={setPassword}
         />
         <View>
-            <Button label="Login" targetScreen="login"
+            <Button label="Login" targetScreen="loginUser"
             style={{ height: '80%', width: '100%'}} // Override button styles
             onPress={handleLogin}
             />
