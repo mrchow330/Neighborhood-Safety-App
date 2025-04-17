@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   logoutText: {
     color: 'white',
     fontFamily: 'Nunito_400Regular',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     textAlign : 'center',
   },
