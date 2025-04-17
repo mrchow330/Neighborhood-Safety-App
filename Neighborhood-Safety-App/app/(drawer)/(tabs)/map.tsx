@@ -58,7 +58,7 @@
 // export default React.memo(MyComponent)
 
 
-import React from 'react'
+import React, {useEffect, useState, useCallback} from 'react'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import { GOOGLE_MAPS_API_KEY } from '../../../config'
 
@@ -83,6 +83,7 @@ function MyComponent() {
 
   const [map, setMap] = React.useState(null)
   const [markerPosition, setMarkerPosition] = React.useState(null)
+  const [center,setCenter] = useState(defaultCenter)
 
   const onLoad = React.useCallback((map) => {
     setMap(map)
@@ -97,6 +98,23 @@ function MyComponent() {
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
     })
+  }, [])
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCenter({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          })
+        },
+        (error) => {
+          console.warn('Geolocation error:', error.message)
+          // Fallback: stay with default center
+        }
+      )
+    }
   }, [])
 
   return isLoaded ? (
