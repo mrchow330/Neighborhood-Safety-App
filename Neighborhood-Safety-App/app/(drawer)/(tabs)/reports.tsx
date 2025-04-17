@@ -243,8 +243,16 @@ export default function ReportScreen() {
         {filteredReports.map((report, index) => (
           <View key={index} style={styles.reportItem}>
             <View style={styles.rowBetween}>
+<<<<<<< HEAD
               <Text style={styles.reportLabel}>Issue Type: <Text style={styles.reportValue}>{report.issueType || 'Unknown'}</Text></Text>
               <Text style={styles.reportLabel}>Submitted at: <Text style={styles.reportValue}>{report.createdAt?.split('T')[0] || 'N/A'}</Text></Text>
+=======
+              <Text style={styles.reportLabel}>Issue Type: <Text style={styles.reportValue}>{report.issueType}</Text></Text>
+              <Text style={styles.reportLabel}>Submitted at: <Text style={styles.reportValue}>
+                {new Date(report.createdAt).toISOString().split("T")[0]} {/* Format the date */}
+              </Text>
+            </Text>
+>>>>>>> 712927eb071a5c63921382f2c2a056cfe55a0640
             </View>
             <Text style={styles.reportLabel}>Status: <Text style={[styles.reportValue, { color: statusColors[report.status] || '#000' }]}>{report.status || 'Unknown'}</Text></Text>
             <TouchableOpacity onPress={() => toggleExpand(index)}>
@@ -253,6 +261,7 @@ export default function ReportScreen() {
             {expandedIndex === index && (
               <View style={styles.expandedContainer}>
                 <Text style={styles.expandedLabel}>Location</Text>
+<<<<<<< HEAD
                 <Text style={styles.expandedText}>{typeof report.location === 'string' ? report.location : report.location?.description || 'N/A'}</Text>
                 {report.photoUri && (
                   <TouchableOpacity onPress={() => { setModalImageUri(report.photoUri); setModalVisible(true); }}>
@@ -262,6 +271,15 @@ export default function ReportScreen() {
                       resizeMode="cover"
                     />
                   </TouchableOpacity>
+=======
+                <Text style={styles.expandedText}>{report.location}</Text>
+                {report.image && (
+                  <Image
+                    source={{ uri: report.image }}
+                    style={styles.imagePlaceholder}
+                    resizeMode="cover"
+                  />
+>>>>>>> 712927eb071a5c63921382f2c2a056cfe55a0640
                 )}
                 <Text style={styles.expandedLabel}>Description</Text>
                 <Text style={styles.expandedText}>{report.description}</Text>
