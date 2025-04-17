@@ -20,12 +20,14 @@ This app uses the following technologies and libraries:
 - [EAS Build](https://docs.expo.dev/build/introduction/) (for building the app)
 - [React Navigation](https://reactnavigation.org/) (for navigation)
 - [Expo Router](https://expo.github.io/router/docs) (for file-based routing)
+- [Async Storage](https://react-native-async-storage.github.io/async-storage/docs/usage/) ( for storing data in local storage)
 
 ### Backend: 
 - [express](https://expressjs.com/) (for building the server and handling API routes)
 - [mongoose](https://mongoosejs.com/) (for connecting to and interacting with the MongoDB database)
 - [dotenv](https://www.npmjs.com/package/dotenv) (for managing environment variables securely)
 - [cors](https://www.npmjs.com/package/cors) (for enabling cross-origin resource sharing)
+- 
 
 ### In the future:
 - Google Maps API.
