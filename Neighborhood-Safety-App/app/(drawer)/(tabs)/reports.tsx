@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   ScrollView,
   Switch,
-  Image
+  Image,
+  Modal
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
@@ -122,18 +123,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 10,
   },
-  imagePlaceholder: {
+  imagePreview: {
     width: '100%',
     height: 160,
-    backgroundColor: '#e2e8f0',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10,
     borderRadius: 6,
+    marginBottom: 10,
   },
   imageText: {
     color: '#475569',
     fontStyle: 'italic',
+  },
+  modalImage: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullImage: {
+    width: '90%',
+    height: '70%',
+    resizeMode: 'contain',
   },
 });
 
@@ -145,22 +154,24 @@ export default function ReportScreen() {
   const [endDate, setEndDate] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalImageUri, setModalImageUri] = useState('');
 
   const [reports, setReports] = useState([]);
 
   React.useEffect(() => {
-  const fetchReports = async () => {
-    try {
-      const response = await fetch('https://neighborhood-safety-backend.vercel.app/api/reports');
-      const data = await response.json();
-      setReports(data);
-    } catch (error) {
-      console.error('Failed to fetch reports:', error);
-    }
-  };
+    const fetchReports = async () => {
+      try {
+        const response = await fetch('https://neighborhood-safety-backend.vercel.app/api/reports');
+        const data = await response.json();
+        setReports(data);
+      } catch (error) {
+        console.error('Failed to fetch reports:', error);
+      }
+    };
 
-  fetchReports();
-}, []);
+    fetchReports();
+  }, []);
 
   const statusColors: Record<string, string> = {
     'Reviewed': '#16a34a',
@@ -175,15 +186,14 @@ export default function ReportScreen() {
   };
 
   const filteredReports = reports.filter((report) => {
-  const imageMatch = hasImage ? !!report.image : true;
-  const typeMatch = selectedIssue ? report.type === selectedIssue : true;
-  const startMatch = startDate ? report.date >= startDate : true;
-  const endMatch = endDate ? report.date <= endDate : true;
-  return imageMatch && typeMatch && startMatch && endMatch;
-});
+    const imageMatch = hasImage ? !!report.photoUri : true;
+    const typeMatch = selectedIssue ? report.issueType === selectedIssue : true;
+    const startMatch = startDate ? report.createdAt >= startDate : true;
+    const endMatch = endDate ? report.createdAt <= endDate : true;
+    return imageMatch && typeMatch && startMatch && endMatch;
+  });
 
-
-return (
+  return (
     <View style={styles.container}>
       <Text style={styles.title}>Reports</Text>
 
@@ -199,11 +209,11 @@ return (
             onValueChange={(itemValue) => setSelectedIssue(itemValue)}
             style={styles.picker}
           >
-            <Picker.Item label="Select issue type" value="" />
-            <Picker.Item label="Pothole" value="Pothole" />
-            <Picker.Item label="Streetlight Outage" value="Streetlight Outage" />
-            <Picker.Item label="Graffiti" value="Graffiti" />
-            <Picker.Item label="Other" value="Other" />
+            <Picker.Item label="Select an issue type" value="" />
+            <Picker.Item label="Pothole/Road Damage" value="pothole" />
+            <Picker.Item label="Streetlight Outage" value="streetlight" />
+            <Picker.Item label="Graffiti" value="graffiti" />
+            <Picker.Item label="Other" value="other" />
           </Picker>
 
           <View style={styles.row}>
@@ -233,26 +243,25 @@ return (
         {filteredReports.map((report, index) => (
           <View key={index} style={styles.reportItem}>
             <View style={styles.rowBetween}>
-              <Text style={styles.reportLabel}>Issue Type: <Text style={styles.reportValue}>{report.issueType}</Text></Text>
-              <Text style={styles.reportLabel}>Submitted at: <Text style={styles.reportValue}>
-                {new Date(report.createdAt).toISOString().split("T")[0]} {/* Format the date */}
-              </Text>
-            </Text>
+              <Text style={styles.reportLabel}>Issue Type: <Text style={styles.reportValue}>{report.issueType || 'Unknown'}</Text></Text>
+              <Text style={styles.reportLabel}>Submitted at: <Text style={styles.reportValue}>{report.createdAt?.split('T')[0] || 'N/A'}</Text></Text>
             </View>
-            <Text style={styles.reportLabel}>Status: <Text style={[styles.reportValue, { color: statusColors[report.status] || '#000' }]}>{report.status}</Text></Text>
+            <Text style={styles.reportLabel}>Status: <Text style={[styles.reportValue, { color: statusColors[report.status] || '#000' }]}>{report.status || 'Unknown'}</Text></Text>
             <TouchableOpacity onPress={() => toggleExpand(index)}>
               <Text style={styles.expandText}>{expandedIndex === index ? 'Collapse ▲' : 'Expand ▼'}</Text>
             </TouchableOpacity>
             {expandedIndex === index && (
               <View style={styles.expandedContainer}>
                 <Text style={styles.expandedLabel}>Location</Text>
-                <Text style={styles.expandedText}>{report.location}</Text>
-                {report.image && (
-                  <Image
-                    source={{ uri: report.image }}
-                    style={styles.imagePlaceholder}
-                    resizeMode="cover"
-                  />
+                <Text style={styles.expandedText}>{typeof report.location === 'string' ? report.location : report.location?.description || 'N/A'}</Text>
+                {report.photoUri && (
+                  <TouchableOpacity onPress={() => { setModalImageUri(report.photoUri); setModalVisible(true); }}>
+                    <Image
+                      source={{ uri: report.photoUri }}
+                      style={styles.imagePreview}
+                      resizeMode="cover"
+                    />
+                  </TouchableOpacity>
                 )}
                 <Text style={styles.expandedLabel}>Description</Text>
                 <Text style={styles.expandedText}>{report.description}</Text>
@@ -261,6 +270,16 @@ return (
           </View>
         ))}
       </ScrollView>
+
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <TouchableOpacity style={styles.modalImage} onPress={() => setModalVisible(false)}>
+          <Image source={{ uri: modalImageUri }} style={styles.fullImage} />
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 }
