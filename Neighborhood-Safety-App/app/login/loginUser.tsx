@@ -49,18 +49,14 @@ export default function LoginScreen() {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccessMessage(data.message); 
+        setSuccessMessage(data.message);
         console.log('login.tsx: user login successful:', data);
-        signIn(data._id?.$oid || data.uuid || data.authToken)
-      //   Alert.alert('Success', data.message, [
-      //     { text: 'OK', onPress: () => {
-      //       console.log('login.tsx: Calling signIn()', data._id?.$oid);
-      //       signIn(data._id?.$oid || data.uuid || data.authToken);
-      //     }},
-      //   ]
-      // );
-        setUsername('');
-        setPassword('');
+        if (data.token) {
+          console.log('login.tsx: Calling signIn() with token:', data.token);
+          signIn(data.token); // Pass the token to your AuthProvider
+          setUsername('');
+          setPassword('');
+        }
       } else if (response.status === 404) {
         setErrorMessage(data.error || 'User not found.');
         Alert.alert('Error', data.error || 'User not found.');

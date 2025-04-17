@@ -5,7 +5,7 @@ import {createContext, MutableRefObject, ReactNode, useCallback, useContext, use
 const AuthContext = createContext<{
   signIn: (token: string) => void;
   signOut: () => void
-  token: MutableRefObject<string | null> | null;
+  token: string | null;
   isLoading: boolean;
   isAuthenticated : boolean;
 }>({
@@ -22,14 +22,15 @@ export function useAuthSession() {
 }
 
 export default function AuthProvider  ({children}:{children: ReactNode}): ReactNode {
-  const tokenRef = useRef<string|null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async ():Promise<void> => {
-      const token = await AsyncStorage.getItem('@token');
-      tokenRef.current = token || '';
+      const storedToken = await AsyncStorage.getItem('@token');
+      setToken(storedToken || null);
+      setIsAuthenticated(!!storedToken);
       setIsLoading(false);
     })()
   }, []);
@@ -37,15 +38,15 @@ export default function AuthProvider  ({children}:{children: ReactNode}): ReactN
   const signIn = useCallback(async (authToken: string) => {
     console.log("sign in running")
     await AsyncStorage.setItem('@token', authToken);
-    tokenRef.current = authToken;
+    setToken(authToken);
     setIsAuthenticated(true);
     router.replace('/(authorized)/(drawer)/(tabs)')
     setIsLoading(false);
   }, [router]);
 
   const signOut = useCallback(async () => {
-    await AsyncStorage.setItem('@token', '');
-    tokenRef.current = null;
+    await AsyncStorage.removeItem('@token');
+    setToken(null);
     router.replace('/login');
   }, []);
 
@@ -54,7 +55,7 @@ export default function AuthProvider  ({children}:{children: ReactNode}): ReactN
       value={{
         signIn,
         signOut,
-        token: tokenRef,
+        token,
         isLoading,
         isAuthenticated
       }}
