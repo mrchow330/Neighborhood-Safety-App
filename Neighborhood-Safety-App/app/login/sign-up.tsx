@@ -1,6 +1,9 @@
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert} from 'react-native';
 import Button from '@/components/Button';
 import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';  
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';  // For proper typing
+import { RootStackParamList } from '../(authorized)/_layout'; 
 
 export default function CreateAccountScreen() {
   const [firstName, setFirstName] = useState('');
@@ -12,6 +15,11 @@ export default function CreateAccountScreen() {
   // const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+     const handleLoginPress = ()=>{
+        navigation.navigate('loginUser');
+     }
 
   const handleSignUp = async () => {
     setErrorMessage('');
@@ -139,7 +147,7 @@ export default function CreateAccountScreen() {
       </View>
       <View style={styles.loginContainer}>
         <Text style={styles.haveAccountText}>Have an account?</Text>
-        <TouchableOpacity >
+        <TouchableOpacity onPress={handleLoginPress}>
           <Text style={styles.loginLink}> Login</Text>
         </TouchableOpacity>
       </View>
