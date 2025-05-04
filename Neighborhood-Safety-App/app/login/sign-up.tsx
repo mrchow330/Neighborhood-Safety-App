@@ -112,7 +112,7 @@ export default function CreateAccountScreen() {
     <ScrollView style={styles.scrollViewContainer} contentContainerStyle={styles.container}>
       <Text style={styles.header}>Create an Account</Text>
       <Text style={styles.text}>Please fill out fields.</Text>
-      {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null} {/* Add error message display */}
+      {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null} {/* Add error message */}
 
 
       <TextInput
