@@ -56,8 +56,6 @@ export default function CreateAccountScreen() {
       if (response.ok) {
         setSuccessMessage(data.message);
         console.log('Registration successful:', data);
-        // Optionally, navigate to a login screen or display a confirmation
-        // Example of using Alert for feedback:
         Alert.alert('Success', data.message, [
           { text: 'OK', onPress: () => console.log('OK Pressed') },
         ]);
@@ -68,6 +66,7 @@ export default function CreateAccountScreen() {
         setEmail('');
         setPhoneNumber('');
         setPassword('');
+        navigation.navigate('loginUser');
       } else {
         setErrorMessage(data.error || 'Registration failed. Please try again.');
         console.error('Registration error:', data);
