@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Define styles at the top
 const styles = StyleSheet.create({
@@ -284,21 +285,25 @@ export default function ReportScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false); // Track submission status
 
   const handleSubmit = async () => {
-    
     try {
-
-      // Validate that a location has been selected
       if (!geoLocation || !geoLocation.coordinates || geoLocation.coordinates.length !== 2) {
         alert("Please select a location on the map.");
         return;
       }
-
-      const reportId = uuidv4(); // Generate a unique ID for the report
+  
+      const userId = await AsyncStorage.getItem('userId'); // 🔑 Fetch userId
+  
+      if (!userId) {
+        alert("User not authenticated. Please log in again.");
+        return;
+      }
+  
+      const reportId = uuidv4();
       let photoUri = null;
   
       if (photo) {
         try {
-          photoUri = await uploadToCloudinary(photo, reportId); // Pass the report ID to Cloudinary
+          photoUri = await uploadToCloudinary(photo, reportId);
         } catch (error) {
           setSubmissionMessage("Failed to upload the image. Please try again.");
           setSubmissionMessageColor("#dc3545");
@@ -309,30 +314,31 @@ export default function ReportScreen() {
       const reportData = {
         report_id: reportId,
         issueType: selectedIssue,
-        location: geoLocation || { type: 'Point', coordinates: [] }, // Use GeoJSON location
+        location: geoLocation || { type: 'Point', coordinates: [] },
         description,
-        photoUri, // Cloudinary URL of the uploaded image
+        photoUri,
+        userId,
       };
   
       const response = await axios.post('https://neighborhood-safety-backend.vercel.app/api/reports', reportData);
   
       setSubmissionMessage("Report submitted successfully!\nRedirecting to homepage...");
-      setSubmissionMessageColor("#28a745")
-
+      setSubmissionMessageColor("#28a745");
+  
       setIsSubmitting(true);
   
-      // Close the modal after a delay
       setTimeout(() => {
         handleCloseModal();
-        setSubmissionMessage(""); // Clear the message after closing
-        router.push('/'); // Redirect to the homepage
+        setSubmissionMessage("");
+        router.push('/');
       }, 3000);
     } catch (error) {
       console.error("Error submitting report:", error);
       setSubmissionMessage("Failed to submit the report. Please try again.");
       setSubmissionMessageColor("#dc3545");
-      }
+    }
   };
+  
 
 
   return (

@@ -7,6 +7,7 @@ import type {ElementRef} from 'react';
 import { useNavigation } from '@react-navigation/native';  
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';  // For proper typing
 import { RootStackParamList } from '../(authorized)/_layout'; 
+import * as SecureStore from 'expo-secure-store';
 
 export default function LoginScreen() {
    const [username, setUsername] = useState('');
@@ -22,61 +23,49 @@ export default function LoginScreen() {
    const handleSignUpPress = ()=>{
       navigation.navigate('sign-up');
    }
-   const handleLogin= async ()=>{
+   const handleLogin = async () => {
     setErrorMessage('');
     setSuccessMessage(''); 
     Keyboard.dismiss();
-
+  
     if (!username || !password) {
       setErrorMessage('Username and password are required.');
       return;
     }
-
-    const userCredentials = {
-      username: username,
-      password: password,
-    };
-
+  
+    const userCredentials = { username, password };
+  
     try {
       const response = await fetch('https://neighborhood-safety-backend.vercel.app/api/users/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userCredentials),
       });
-
+  
       const data = await response.json();
-
-      if (response.ok) {
-        setSuccessMessage(data.message);
-        console.log('login.tsx: user login successful:', data);
-        if (data.token) {
-          console.log('login.tsx: Calling signIn() with token:', data.token);
-          signIn(data.token); // Pass the token to your AuthProvider
-          setUsername('');
-          setPassword('');
-        }
-      } else if (response.status === 404) {
-        setErrorMessage(data.error || 'User not found.');
-        Alert.alert('Error', data.error || 'User not found.');
-      } else if (response.status === 403) {
-        setErrorMessage(data.error || 'Access denied. Admins only.');
-        Alert.alert('Error', data.error || 'Access denied. Admins only.');
-      } else if (response.status === 401) {
-        setErrorMessage(data.error || 'Invalid credentials.');
-        Alert.alert('Error', data.error || 'Invalid credentials.');
+  
+      if (response.ok && data.token) {
+        console.log('Login successful:', data);
+  
+        // Store token and userId securely
+        await SecureStore.setItemAsync('userToken', data.token);
+        await SecureStore.setItemAsync('userId', data.userId);
+  
+        signIn(data.token);
+        setUsername('');
+        setPassword('');
       } else {
-        setErrorMessage(data.error || 'User login failed. Please try again.');
-        Alert.alert('Error', data.error || 'User login failed. Please try again.');
-        console.error('User login error:', data);
+        const errorMsg = data.error || 'Login failed';
+        setErrorMessage(errorMsg);
+        Alert.alert('Error', errorMsg);
       }
     } catch (error) {
-      setErrorMessage('Network error. Please check your connection and try again.');
-      Alert.alert('Error', 'Network error. Please check your connection and try again.');
-      console.error('User login network error:', error);
+      setErrorMessage('Network error. Please try again.');
+      Alert.alert('Error', 'Network error. Please try again.');
+      console.error('Login error:', error);
     }
-   };
+  };
+
    return (
       <View style={styles.container}>
         <Text style={styles.header}>Welcome Back.</Text>
