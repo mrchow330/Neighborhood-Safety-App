@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, Alert, Keyboard} from 'react-native';
+import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, Alert, Keyboard, Animated, ActivityIndicator} from 'react-native';
 import Button from '@/components/Button';
 import React, { useState, useRef} from 'react';
 // import {useRouter} from 'expo-router';
@@ -13,6 +13,8 @@ export default function LoginScreen() {
    const [password, setPassword] = useState('');
    const [errorMessage, setErrorMessage] = useState('');
    const [successMessage, setSuccessMessage] = useState('');
+   const [loading, setLoading] = useState(false); // State for loading
+   
    const {signIn} = useAuthSession();
   //  const router=useRouter();
 
@@ -25,10 +27,12 @@ export default function LoginScreen() {
    const handleLogin= async ()=>{
     setErrorMessage('');
     setSuccessMessage(''); 
+    setLoading(true);
     Keyboard.dismiss();
 
     if (!username || !password) {
       setErrorMessage('Username and password are required.');
+      setLoading(false);
       return;
     }
 
@@ -75,12 +79,15 @@ export default function LoginScreen() {
       setErrorMessage('Network error. Please check your connection and try again.');
       Alert.alert('Error', 'Network error. Please check your connection and try again.');
       console.error('User login network error:', error);
+    } finally{
+      setLoading(false);
     }
    };
    return (
       <View style={styles.container}>
         <Text style={styles.header}>Welcome Back.</Text>
-        {/* Email Input */}
+        {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null} {/* Display error message */}
+        {/* Username Input */}
         <TextInput
           style={styles.input}
           placeholder="Username"
@@ -121,6 +128,11 @@ export default function LoginScreen() {
             <Text style={styles.signUpLink}> Sign up now</Text>
           </TouchableOpacity>
         </View>
+        {loading && (
+        <View style={styles.loadingContainer}> {/* Add loading indicator container */}
+          <ActivityIndicator size="large" color="#1e3a8a" />
+        </View>
+      )}
       </View>
     );
 }
@@ -182,6 +194,32 @@ const styles = StyleSheet.create({
   signUpLink: {
     color: '#1e3a8a',
     fontSize: 14,
+    fontWeight: 'bold',
+  },
+  error: { // Style for error message
+    color: 'red',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  loadingContainer: { // Style for loading indicator overlay
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(248, 250, 252, 0.7)', // Semi-transparent background
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10, // Ensure it's on top of other elements
+  },
+  successContainer: { // Style for success notification
+    position: 'absolute',
+    top: 60, // Adjust as needed
+    left: 20,
+    right: 20,
+    backgroundColor: 'rgba(0, 34, 128, 0.7)', // Semi-transparent green
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  successText: {
+    color: 'white',
     fontWeight: 'bold',
   },
 });

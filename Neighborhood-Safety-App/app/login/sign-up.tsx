@@ -1,6 +1,6 @@
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert} from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert, Animated, ActivityIndicator} from 'react-native';
 import Button from '@/components/Button';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';  
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';  // For proper typing
 import { RootStackParamList } from '../(authorized)/_layout'; 
@@ -15,23 +15,48 @@ export default function CreateAccountScreen() {
   // const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const fadeAnimation = useRef(new Animated.Value(0)).current;
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
      const handleLoginPress = ()=>{
         navigation.navigate('loginUser');
      }
 
+     useEffect(() => {
+      if (successMessage) {
+        Animated.timing(fadeAnimation, {
+          toValue: 1,
+          duration: 500, // Fade in duration
+          useNativeDriver: true,
+        }).start(() => {
+          setTimeout(() => {
+            Animated.timing(fadeAnimation, {
+              toValue: 0,
+              duration: 500, // Fade out duration
+              useNativeDriver: true,
+            }).start(() => {
+              navigation.navigate('loginUser');
+            });
+          }, 1500); // Display for 1.5 seconds
+        });
+      }
+    }, [successMessage, navigation, fadeAnimation]);
+
   const handleSignUp = async () => {
     setErrorMessage('');
     setSuccessMessage('');
+    setLoading(true);
 
     if (!firstName || !lastName || !username || !password) {
       setErrorMessage('First name, last name, username, and password are required.');
+      setLoading(false);
       return;
     }
 
     if (!email || !phoneNumber) {
       setErrorMessage('Please provide email and phone number.');
+      setLoading(false);
       return;
     }
     const userData = {
@@ -56,11 +81,9 @@ export default function CreateAccountScreen() {
       if (response.ok) {
         setSuccessMessage(data.message);
         console.log('Registration successful:', data);
-        // Optionally, navigate to a login screen or display a confirmation
-        // Example of using Alert for feedback:
-        Alert.alert('Success', data.message, [
-          { text: 'OK', onPress: () => console.log('OK Pressed') },
-        ]);
+        // Alert.alert('Success', data.message, [
+        //   { text: 'OK', onPress: () => console.log('OK Pressed') },
+        // ]);
         // Clear the form
         setFirstName('');
         setLastName('');
@@ -68,6 +91,7 @@ export default function CreateAccountScreen() {
         setEmail('');
         setPhoneNumber('');
         setPassword('');
+        // navigation.navigate('loginUser');
       } else {
         setErrorMessage(data.error || 'Registration failed. Please try again.');
         console.error('Registration error:', data);
@@ -78,6 +102,8 @@ export default function CreateAccountScreen() {
       setErrorMessage('Network error. Please check your connection and try again.');
       console.error('Registration network error:', error);
       Alert.alert('Error', 'Network error. Please check your connection and try again.');
+    } finally{
+      setLoading(false);
     }
 
   };
@@ -86,6 +112,8 @@ export default function CreateAccountScreen() {
     <ScrollView style={styles.scrollViewContainer} contentContainerStyle={styles.container}>
       <Text style={styles.header}>Create an Account</Text>
       <Text style={styles.text}>Please fill out fields.</Text>
+      {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null} {/* Add error message */}
+
 
       <TextInput
         style={styles.input}
@@ -151,6 +179,17 @@ export default function CreateAccountScreen() {
           <Text style={styles.loginLink}> Login</Text>
         </TouchableOpacity>
       </View>
+      {loading && (
+        <View style={styles.loadingContainer}> {/* Add loading indicator container */}
+          <ActivityIndicator size="large" color="#1e3a8a" />
+        </View>
+      )}
+
+      {successMessage && (
+        <Animated.View style={[styles.successContainer, { opacity: fadeAnimation }]}> {/* Add success notification */}
+          <Text style={styles.successText}>{successMessage}</Text>
+        </Animated.View>
+      )}
     </ScrollView>
   );
 }
@@ -215,6 +254,32 @@ const styles = StyleSheet.create({
   loginLink: {
     color: '#1e3a8a',
     fontSize: 14,
+    fontWeight: 'bold',
+  },
+  error: { // Style for error message
+    color: 'red',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  loadingContainer: { // Style for loading indicator overlay
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(248, 250, 252, 0.7)', // Semi-transparent background
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10, // Ensure it's on top of other elements
+  },
+  successContainer: { // Style for success notification
+    position: 'absolute',
+    top: 60, // Adjust as needed
+    left: 20,
+    right: 20,
+    backgroundColor: 'rgba(0, 34, 128, 0.7)', // Semi-transparent green
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  successText: {
+    color: 'white',
     fontWeight: 'bold',
   },
 });
