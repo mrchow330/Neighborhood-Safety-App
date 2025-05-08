@@ -46,11 +46,8 @@ For more information about the backend repository, it can be accessed [here](htt
 - **Live Map**: Displays all submitted reports with markers and status-based color coding.
 - **User Authentication**: Login and sign-up functionality with backend integration.
 
-## Future features
-- **User-readable Geolocation Data**: Convert the geolocation data to an address that a user can read
-- **Notification System**: Anytime a status of a report is changed, it should notify the user through email (and through text later on)
 
-## Set up/View on Local Machine
+## Installation & Setup
 
 To set up and view the app on your local machine, follow these steps:
 ### Prerequisites
@@ -61,11 +58,11 @@ To set up and view the app on your local machine, follow these steps:
 - Create a [Cloudinary](https://cloudinary.com/) account and set up an upload preset.
 - Obtain a [Google Maps API Key](https://developers.google.com/maps/documentation).
 
-### Steps:
+### Installation Steps:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/your-username/Neighborhood-Safety-App.git
+   git clone https://github.com/mrchow330/Neighborhood-Safety-App.git
    ```
 
 2. Navigate to the project directory:
