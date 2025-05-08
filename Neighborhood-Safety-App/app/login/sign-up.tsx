@@ -66,6 +66,7 @@ export default function CreateAccountScreen() {
       password: password,
       email: email,
       phone_number: phoneNumber,
+      is_Verified: false,
     };
 
     try {
@@ -81,10 +82,6 @@ export default function CreateAccountScreen() {
       if (response.ok) {
         setSuccessMessage(data.message);
         console.log('Registration successful:', data);
-        // Alert.alert('Success', data.message, [
-        //   { text: 'OK', onPress: () => console.log('OK Pressed') },
-        // ]);
-        // Clear the form
         setFirstName('');
         setLastName('');
         setUsername('');
@@ -92,6 +89,13 @@ export default function CreateAccountScreen() {
         setPhoneNumber('');
         setPassword('');
         // navigation.navigate('loginUser');
+        if(!data?.is_Verified){
+          navigation.navigate('verification');
+        }else{
+          // Handle successful signup without immediate verification (if your backend allows this)
+          navigation.navigate('(tabs)');
+          console.log('for some reason you were not verified...');
+        }
       } else {
         setErrorMessage(data.error || 'Registration failed. Please try again.');
         console.error('Registration error:', data);
