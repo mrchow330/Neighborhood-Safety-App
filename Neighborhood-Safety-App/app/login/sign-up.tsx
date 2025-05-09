@@ -17,6 +17,7 @@ export default function CreateAccountScreen() {
   const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const fadeAnimation = useRef(new Animated.Value(0)).current;
+  const shakeAnimation = useRef(new Animated.Value(0)).current;
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
      const handleLoginPress = ()=>{
@@ -43,35 +44,91 @@ export default function CreateAccountScreen() {
       }
     }, [successMessage, navigation, fadeAnimation]);
 
+  //----regex-----
+  const validateEmail = (email: string |any) =>{
+    if (typeof email!== 'string'){
+      return false;
+    }
+    const re= /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  }
+  const validatePassword = (password: string |any)=>{
+    if (typeof password != 'string'){
+      return false;
+    }
+    if (password.length < 8){
+      return false;
+    }
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /[0-9]/.test(password);
+    const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    return hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
+  }
+  const validatePhoneNumber = (phoneNumber: string |any)=>{
+    if (typeof phoneNumber != 'string'){
+      return false;
+    }
+    const re = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im;
+    return re.test(phoneNumber);
+  }
+
+
   const handleSignUp = async () => {
     setErrorMessage('');
     setSuccessMessage('');
     setLoading(true);
 
-    if (!firstName || !lastName || !username || !password) {
+    if (!firstName.trim() || !lastName.trim() || !username.trim() || !password.trim()) {
       setErrorMessage('First name, last name, username, and password are required.');
       setLoading(false);
+      triggerShake();
       return;
     }
 
-    if (!email || !phoneNumber) {
+    if (!email.trim() || !phoneNumber.trim()) {
       setErrorMessage('Please provide email and phone number.');
       setLoading(false);
+      triggerShake();
+      return;
+    }
+    if(!validateEmail(email)){
+      setErrorMessage('Please enter valid email address.');
+      setLoading(false);
+      triggerShake();
+      return;
+    }
+    if(!validatePhoneNumber(phoneNumber)){
+      setErrorMessage('Please enter a valid phone number.');
+      setLoading(false);
+      triggerShake();
+      return;
+    }
+    if(!validatePassword(password)){
+      setErrorMessage(
+        'Password must meet the following criteria:\n' +
+      '- Be at least 8 characters long\n' +
+      '- Contain at least one uppercase letter (A-Z)\n' +
+      '- Contain at least one lowercase letter (a-z)\n' +
+      '- Contain at least one number (0-9)\n' +
+      '- Contain at least one special character (e.g., !@#$%^&*)'
+      
+        );
+      setLoading(false);
+      triggerShake();
       return;
     }
     const userData = {
       first_name: firstName,
       last_name: lastName,
       username: username,
-      password: password,
       email: email,
       phone_number: phoneNumber,
+      password: password,
       isVerified: false,
     };
 
-    //http://localhost:3000/api/users
-
-    //https://neighborhood-safety-backend.vercel.app/api/users
     try {
       const response = await fetch('https://neighborhood-safety-backend.vercel.app/api/users', {
         method: 'POST',
@@ -91,18 +148,15 @@ export default function CreateAccountScreen() {
         setEmail('');
         setPhoneNumber('');
         setPassword('');
-        // navigation.navigate('loginUser');
         if(!data?.isVerified){
           navigation.navigate('verification');
         }else{
-          // Handle successful signup without immediate verification (if your backend allows this)
           navigation.navigate('(tabs)');
           console.log('for some reason you were not verified...');
         }
       } else {
         setErrorMessage(data.error || 'Registration failed. Please try again.');
         console.error('Registration error:', data);
-        // Optionally, use Alert to display the error
         Alert.alert('Error', data.error || 'Registration failed. Please try again.');
       }
     } catch (error) {
@@ -115,11 +169,25 @@ export default function CreateAccountScreen() {
 
   };
 
+  const triggerShake = () => {
+    Animated.sequence([
+      Animated.timing(shakeAnimation, { toValue: 10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: -10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: 10, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnimation, { toValue: 0, duration: 50, useNativeDriver: true }),
+    ]).start();
+  };
+
+  const errorTextStyle = [
+    styles.error,
+    { transform: [{ translateX: shakeAnimation }] }, // Apply the shake animation
+  ];
+
   return (
     <ScrollView style={styles.scrollViewContainer} contentContainerStyle={styles.container}>
       <Text style={styles.header}>Create an Account</Text>
       <Text style={styles.text}>Please fill out fields.</Text>
-      {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null} {/* Add error message */}
+      {errorMessage ? <Animated.Text style={errorTextStyle}>{errorMessage}</Animated.Text> : null} {/* Add error message */}
 
 
       <TextInput
@@ -167,13 +235,7 @@ export default function CreateAccountScreen() {
         value={password}
         onChangeText={setPassword}
       />
-      {/* <TextInput
-        style={styles.input}
-        placeholder="Confirm Password"
-        secureTextEntry={true}
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-      /> */}
+  
       <View>
           <Button label="Sign Up" targetScreen="loginUser"
           style={{ height: '80%', width: '100%'}} // Override button styles
@@ -277,7 +339,7 @@ const styles = StyleSheet.create({
   },
   successContainer: { // Style for success notification
     position: 'absolute',
-    top: 60, // Adjust as needed
+    top: 60, 
     left: 20,
     right: 20,
     backgroundColor: 'rgba(0, 34, 128, 0.7)', // Semi-transparent green
