@@ -66,11 +66,14 @@ export default function CreateAccountScreen() {
       password: password,
       email: email,
       phone_number: phoneNumber,
-      is_Verified: false,
+      isVerified: false,
     };
 
+    //http://localhost:3000/api/users
+
+    //https://neighborhood-safety-backend.vercel.app/api/users
     try {
-      const response = await fetch('https://neighborhood-safety-backend.vercel.app/api/users', {
+      const response = await fetch('http://localhost:3000/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +92,7 @@ export default function CreateAccountScreen() {
         setPhoneNumber('');
         setPassword('');
         // navigation.navigate('loginUser');
-        if(!data?.is_Verified){
+        if(!data?.isVerified){
           navigation.navigate('verification');
         }else{
           // Handle successful signup without immediate verification (if your backend allows this)
