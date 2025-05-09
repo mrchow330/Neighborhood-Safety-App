@@ -64,6 +64,7 @@ export type RootStackParamList = {
   communityGuidlines : undefined;
   loginUser: undefined;
   'sign-up': undefined;
+  verification: undefined;
 };
 
 
