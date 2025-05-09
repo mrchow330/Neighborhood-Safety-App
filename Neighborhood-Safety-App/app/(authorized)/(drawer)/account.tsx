@@ -1,6 +1,6 @@
 // drawer/account.tsx
 
-import { useAuthSession } from "@/providers/AuthProvider";
+import AuthProvider, { useAuthSession } from "@/providers/AuthProvider";
 import { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { useFonts } from 'expo-font';
@@ -14,33 +14,34 @@ export default function AccountScreen() {
   if (!fontsLoaded) return <Text>Loading...</Text>;
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
-        <Text style={styles.header}>Account</Text>
+    
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.container}>
+          <Text style={styles.header}>Account</Text>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>User Info</Text>
-          <Text style={styles.bodyText}>
-            <Text style={styles.boldText}>Email:</Text> {user?.email ?? 'N/A'}
-          </Text>
-          <Text style={styles.bodyText}>
-            <Text style={styles.boldText}>Username:</Text> {user?.username ?? 'N/A'}
-          </Text>
-          <Text style={styles.bodyText}>
-            <Text style={styles.boldText}>First Name:</Text> {user?.firstName ?? 'N/A'}
-          </Text>
-          <Text style={styles.bodyText}>
-            <Text style={styles.boldText}>Last Name:</Text> {user?.lastName ?? 'N/A'}
-          </Text>
-        </View>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>User Info</Text>
+            <Text style={styles.bodyText}>
+              <Text style={styles.boldText}>Id:</Text> {user?.userId ?? 'N/A'}
+            </Text>
+            <Text style={styles.bodyText}>
+              <Text style={styles.boldText}>Username:</Text> {user?.username ?? 'N/A'}
+            </Text>
+            <Text style={styles.bodyText}>
+              <Text style={styles.boldText}>First Name:</Text> {user?.first_name ?? 'N/A'}
+            </Text>
+            <Text style={styles.bodyText}>
+              <Text style={styles.boldText}>Last Name:</Text> {user?.last_name ?? 'N/A'}
+            </Text>
+          </View>
 
-        <View style={styles.section}>
-          <TouchableOpacity style={styles.logoutButton} onPress={signOut}>
-            <Text style={styles.logoutText}>Logout</Text>
-          </TouchableOpacity>
+          <View style={styles.section}>
+            <TouchableOpacity style={styles.logoutButton} onPress={signOut}>
+              <Text style={styles.logoutText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
   );
 }
 

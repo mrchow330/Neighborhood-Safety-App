@@ -7,15 +7,14 @@ import React from 'react';
 
 
 type User = {
-  userId: string,
-  first_name: string,
-  last_name: string,
-  username: string,
-  email: string,
-  phone_number: string,
-  password: string,
-  isModerator: boolean,
-  createdAt: Date,
+  userId: string;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  isModerator: boolean;
+  createdAt: Date;
 };
 
 const AuthContext = createContext<{
@@ -24,8 +23,7 @@ const AuthContext = createContext<{
   token: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  user: User | null;
-  userId: string | null;
+  user: User | null; 
 }>({
   signIn: () => null,
   signOut: () => null,
@@ -34,6 +32,10 @@ const AuthContext = createContext<{
   isAuthenticated: false,
   user: null,
   userId: null,
+  email: null,
+  first_name: null,
+  last_name: null,
+  username: null,
 });
 
 export function useAuthSession() {
@@ -48,7 +50,7 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
 
   const fetchUserProfile = async (authToken: string) => {
     try {
-      const res = await fetch('http://localhost:5000/api/users/me', {
+      const res = await fetch('https://neighborhood-safety-backend.vercel.app/api/users/login', {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
@@ -58,11 +60,17 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
 
       const data = await res.json();
       setUser({
-        email: data.email,
+        userId: data._id,
         username: data.username,
-        firstName: data.firstName,
-        lastName: data.lastName,
+        email: data.email,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        phone_number: data.phone_number,
+        isModerator: data.isModerator,
+        createdAt: new Date(data.createdAt),
       });
+
+      console.log("User profile fetched successfully:", data);
     } catch (err) {
       console.error("Error fetching user profile:", err);
       setUser(null);
@@ -76,8 +84,8 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
       if (storedToken && storedUserId) {
         setToken(storedToken);
         setIsAuthenticated(true);
-        setUser((prevUser) => ({ ...prevUser, userId: storedUserId }));
-        await fetchUserProfile(storedToken);
+        setUser((prevUser) => ({ ...prevUser, userId: storedUserId })); // Temporarily set userId
+        await fetchUserProfile(storedToken); // Fetch full user profile
       }
       setIsLoading(false);
     })();
@@ -85,22 +93,16 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
 
   const signIn = useCallback(async (authToken: string, userId: string) => {
     await AsyncStorage.setItem('@token', authToken);
-    await AsyncStorage.setItem('@userId', userId); 
+    await AsyncStorage.setItem('@userId', userId);
     setToken(authToken);
     setIsAuthenticated(true);
-    setUser((prevUser) => ({ ...prevUser, userId })); 
-    await fetchUserProfile(authToken);
-    try {
-      router.replace('/(authorized)/(drawer)/(tabs)/index'); // Ensure this path exists
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
-    setIsLoading(false);
+    setUser((prevUser) => ({ ...prevUser, userId })); // Temporarily set userId
+    await fetchUserProfile(authToken); // Fetch full user profile
   }, []);
 
   const signOut = useCallback(async () => {
     await AsyncStorage.removeItem('@token');
-    await AsyncStorage.removeItem('@userId');
+    await AsyncStorage.removeItem('@userId'); // Remove userId from AsyncStorage
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
