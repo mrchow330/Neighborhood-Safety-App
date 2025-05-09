@@ -22,7 +22,6 @@ This app uses the following technologies and libraries:
 - [Expo Router](https://expo.github.io/router/docs) (for file-based routing)
 - [Async Storage](https://react-native-async-storage.github.io/async-storage/docs/usage/) ( for storing data in local storage)
 - [Google Maps API](https://developers.google.com/maps/documentation) (for map integration and geolocation)
-- [Expo Linking](https://docs.expo.dev/versions/latest/sdk/linking/) (for handling incoming and outgoing URLs)
 
 ### Backend: 
 - [express](https://expressjs.com/) (for building the server and handling API routes)
