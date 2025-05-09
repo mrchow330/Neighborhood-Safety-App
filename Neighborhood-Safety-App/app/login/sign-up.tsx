@@ -63,15 +63,12 @@ export default function CreateAccountScreen() {
       first_name: firstName,
       last_name: lastName,
       username: username,
-      password: password,
       email: email,
       phone_number: phoneNumber,
+      password: password,
       isVerified: false,
     };
 
-    //http://localhost:3000/api/users
-
-    //https://neighborhood-safety-backend.vercel.app/api/users
     try {
       const response = await fetch('https://neighborhood-safety-backend.vercel.app/api/users', {
         method: 'POST',
