@@ -90,7 +90,11 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
     setIsAuthenticated(true);
     setUser((prevUser) => ({ ...prevUser, userId })); 
     await fetchUserProfile(authToken);
-    router.replace('/(authorized)/(drawer)/(tabs)');
+    try {
+      router.replace('/(authorized)/(drawer)/(tabs)/index'); // Ensure this path exists
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
     setIsLoading(false);
   }, []);
 
