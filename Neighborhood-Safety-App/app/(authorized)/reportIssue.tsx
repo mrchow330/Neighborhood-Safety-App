@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import { useAuthSession } from '@/providers/AuthProvider';
 
 // Define styles at the top
 const styles = StyleSheet.create({
@@ -176,6 +177,7 @@ export default function ReportScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [markerPosition, setMarkerPosition] = useState(center); 
   const [mapCenter, setMapCenter] = useState(center); 
+  const { userId } = useAuthSession();
 
   const router = useRouter(); 
 
@@ -308,6 +310,7 @@ export default function ReportScreen() {
   
       const reportData = {
         report_id: reportId,
+        userId: userId, // Pass the user ID from the AuthProvider
         issueType: selectedIssue,
         location: geoLocation || { type: 'Point', coordinates: [] }, // Use GeoJSON location
         description,

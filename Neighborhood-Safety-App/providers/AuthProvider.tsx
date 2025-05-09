@@ -7,26 +7,33 @@ import React from 'react';
 
 
 type User = {
-  email: string;
-  username: string;
-  firstName: string;
-  lastName: string;
+  userId: string,
+  first_name: string,
+  last_name: string,
+  username: string,
+  email: string,
+  phone_number: string,
+  password: string,
+  isModerator: boolean,
+  createdAt: Date,
 };
 
 const AuthContext = createContext<{
-  signIn: (token: string) => void;
+  signIn: (token: string, userId: string) => void;
   signOut: () => void;
   token: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
   user: User | null;
+  userId: string | null;
 }>({
   signIn: () => null,
   signOut: () => null,
   token: null,
   isLoading: true,
   isAuthenticated: false,
-  user: null
+  user: null,
+  userId: null,
 });
 
 export function useAuthSession() {
@@ -65,19 +72,23 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
   useEffect(() => {
     (async () => {
       const storedToken = await AsyncStorage.getItem('@token');
-      if (storedToken) {
+      const storedUserId = await AsyncStorage.getItem('@userId'); // Retrieve userId
+      if (storedToken && storedUserId) {
         setToken(storedToken);
         setIsAuthenticated(true);
+        setUser((prevUser) => ({ ...prevUser, userId: storedUserId }));
         await fetchUserProfile(storedToken);
       }
       setIsLoading(false);
     })();
   }, []);
 
-  const signIn = useCallback(async (authToken: string) => {
+  const signIn = useCallback(async (authToken: string, userId: string) => {
     await AsyncStorage.setItem('@token', authToken);
+    await AsyncStorage.setItem('@userId', userId); 
     setToken(authToken);
     setIsAuthenticated(true);
+    setUser((prevUser) => ({ ...prevUser, userId })); 
     await fetchUserProfile(authToken);
     router.replace('/(authorized)/(drawer)/(tabs)');
     setIsLoading(false);
@@ -85,6 +96,7 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
 
   const signOut = useCallback(async () => {
     await AsyncStorage.removeItem('@token');
+    await AsyncStorage.removeItem('@userId');
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
