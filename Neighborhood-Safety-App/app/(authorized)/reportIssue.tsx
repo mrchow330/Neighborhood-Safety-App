@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { v4 as uuidv4 } from 'uuid'; // Import the uuid library
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import AuthProvider, { useAuthSession } from '@/providers/AuthProvider';
 
 // Define styles at the top
 const styles = StyleSheet.create({
@@ -176,6 +177,7 @@ export default function ReportScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [markerPosition, setMarkerPosition] = useState(center); 
   const [mapCenter, setMapCenter] = useState(center); 
+  const { user } = useAuthSession();
 
   const router = useRouter(); 
 
@@ -305,15 +307,19 @@ export default function ReportScreen() {
           return;
         }
       }
-  
+
+
+
       const reportData = {
         report_id: reportId,
+        userId: user.userId, // Pass the user ID from the AuthProvider
         issueType: selectedIssue,
         location: geoLocation || { type: 'Point', coordinates: [] }, // Use GeoJSON location
         description,
         photoUri, // Cloudinary URL of the uploaded image
       };
-  
+
+      console.log("User:", user); // Debugging
       const response = await axios.post('https://neighborhood-safety-backend.vercel.app/api/reports', reportData);
   
       setSubmissionMessage("Report submitted successfully!\nRedirecting to homepage...");
@@ -336,7 +342,8 @@ export default function ReportScreen() {
 
 
   return (
-    <View style={styles.container}>
+    
+      <View style={styles.container}>
       {/* Guidelines Section */}
       <ScrollView>
         <Text style={styles.guidelinesTitle}>Examples of Real Safety Concerns:</Text>
