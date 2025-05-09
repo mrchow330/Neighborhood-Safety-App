@@ -14,17 +14,17 @@ const VerificationScreen = () => {
   });
 
   const [verificationStatus, setVerificationStatus] = useState<boolean | null>(null);
-  const [verificationMessage, setVerificationMessage] = useState('');
   const navigation = useNavigation();
+  const [message, setMessage] = useState('');
   const [isChecking, setIsChecking] = useState(true); // Initial loading state
 
   useEffect(() => {
     const handleOpenURL = (event: { url: string | null } | null) => {
-      setIsChecking(true); // Start checking again on new URL
+      setIsChecking(true); // check new URL
       if (event?.url) {
         const { path, queryParams } = Linking.parse(event.url);
 
-        const message = queryParams?.message;
+        const receivedmessage = queryParams?.message;
         const error = queryParams?.error;
 
         const getFirstQueryParam = (param: string | string[] | undefined): string | undefined => {
@@ -35,22 +35,24 @@ const VerificationScreen = () => {
         };
 
         if (path === 'email-verified') {
-          const successMessage = getFirstQueryParam(message) || 'Email verified successfully! Redirecting to home...';
+          const successMessage = getFirstQueryParam(receivedmessage) || 'Email verified successfully! Redirecting to home...';
           setVerificationStatus(true);
-          setVerificationMessage(successMessage);
+          setMessage(successMessage);
           // After a short delay, navigate to home
           setTimeout(() => {
             navigation.navigate('loginUser'); 
-          }, 10000);
+          }, 15000);
         } else if (path === 'email-verification-failed') {
           const errorMessage = getFirstQueryParam(error) || 'Email verification failed.';
           setVerificationStatus(false);
-          setVerificationMessage(errorMessage);
+          setMessage(errorMessage);
           setIsChecking(false);
         } else {
+          setMessage('Checking verification status');
           setIsChecking(false); // Not a verification link
         }
       } else {
+        setMessage('No verification link was found.');
         setIsChecking(false); // No URL
       }
     };
@@ -60,6 +62,7 @@ const VerificationScreen = () => {
       if (url) {
         handleOpenURL({ url });
       } else {
+        setMessage('Waiting for verification link...');
         setIsChecking(false); // No initial URL
       }
     });
@@ -68,29 +71,50 @@ const VerificationScreen = () => {
     const subscription = Linking.addEventListener('url', handleOpenURL);
     return () => subscription.remove();
   }, [navigation]);
-
+  let content;
+  if (isChecking) {
+    content = (
+      <View style={styles.statusContainer}>
+        <ActivityIndicator size="large" color="#1e3a8a" />
+        <Text style={styles.statusText}>Verifying...</Text>
+      </View>
+    );
+  } else if (verificationStatus === true) {
+    content = (
+      <View style={styles.statusContainer}>
+        <Text style={styles.title}>Email Verified!</Text>
+        <Text style={styles.messageText}>{message}</Text>
+        <Text style={styles.infoText}>Redirecting to login...</Text>
+      </View>
+    );
+  } else if (verificationStatus === false) {
+    content = (
+      <View style={styles.statusContainer}>
+        <Text style={styles.title}>Verification Failed</Text>
+        <Text style={styles.messageText}>{message}</Text>
+        <Text style={styles.infoText}>Please try again or request a new link.</Text>
+        {/* Future: Add Resend Email Button here */}
+      </View>
+    );
+  } else {
+    content = (
+      <View style={styles.statusContainer}>
+        <Text style={styles.title}>Verify Your Email</Text>
+        <Text style={styles.messageText}>Please check your email <Text style={styles.boldText}>(including your spam!)</Text> and click the verification link we've sent.</Text>
+        <Text style={styles.infoText}>You will be redirected to the login page shortly.</Text>
+        {/* Future: Add Resend Email Button here */}
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <Image
-              style={styles.image}
-              source={require('../../assets/images/temp-logo.png')}
-              // placeholder={{ blurhash }}
-              contentFit='cover'
-              transition={1000}
-          />
-      <Text style={styles.title}>Verify Your Email</Text>
-      {isChecking && <ActivityIndicator size="large" />}
-      {verificationStatus === true && (
-        <Text style={styles.successText}>{verificationMessage}</Text>
-      )}
-      {verificationStatus === false && (
-        <Text style={styles.errorText}>{verificationMessage}</Text>
-      )}
-      {verificationStatus === null && !isChecking && (
-        <Text style={styles.infoText}>Please check your email and click the verification link we've sent. {"\n"}You will be redirected to the login page shortly.</Text>
-        
-      )}
-      {/* Later: Add a button to resend verification email */}
+        style={styles.image}
+        source={require('../../assets/images/temp-logo.png')}
+        contentFit="cover"
+        transition={1000}
+      />
+      {content}
     </View>
   );
 };
@@ -102,6 +126,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
+  statusContainer: {
+    alignItems: 'center',
+  },
   title: {
     fontSize: 30,
     fontWeight: 'bold',
@@ -110,22 +137,36 @@ const styles = StyleSheet.create({
     color: '#1e3a8a',
     fontFamily: 'Nunito_700Bold',
   },
-  successText: {
+  messageText: {
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#333',
+    marginBottom: 15,
+    fontFamily: 'Nunito_400Regular',
+  },
+  statusText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#1e3a8a',
+    fontFamily: 'Nunito_400Regular',
+  },
+  successText: { // Removed - using messageText with successTitle
     color: 'green',
     marginTop: 20,
     textAlign: 'center',
     fontFamily: 'Nunito_400Regular',
   },
-  errorText: {
+  errorText: { // Removed - using messageText with errorTitle
     color: 'red',
     marginTop: 20,
     textAlign: 'center',
     fontFamily: 'Nunito_400Regular',
   },
   infoText: {
-    marginTop: 20,
+    marginTop: 10,
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 16,
+    color: '#555',
     fontFamily: 'Nunito_400Regular',
   },
   image:{
@@ -133,6 +174,9 @@ const styles = StyleSheet.create({
     height: 200, // Set a fixed height
     resizeMode: 'contain', 
   },
+  boldText:{
+    fontWeight: 'bold',
+  }
 });
 
 export default VerificationScreen;
