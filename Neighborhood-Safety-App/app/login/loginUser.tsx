@@ -67,8 +67,13 @@ export default function LoginScreen() {
           console.log('login.tsx: No token or userId in response:', data);
         }
       } else {
-        setErrorMessage(data.error || 'Login failed');
-        Alert.alert('Error', data.error || 'Login failed');
+        if (data.error === 'Account not verified. Please check your email.') {
+            setErrorMessage(data.error);
+            Alert.alert('Verification Required', data.error);
+        } else {
+            setErrorMessage(data.error || 'Login failed');
+            Alert.alert('Error', data.error || 'Login failed');
+        }
       }
     } catch (error) {
       setErrorMessage('Network error. Please check your connection and try again.');
