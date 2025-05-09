@@ -88,18 +88,15 @@ export default function CreateAccountScreen() {
         setEmail('');
         setPhoneNumber('');
         setPassword('');
-        // navigation.navigate('loginUser');
         if(!data?.isVerified){
           navigation.navigate('verification');
         }else{
-          // Handle successful signup without immediate verification (if your backend allows this)
           navigation.navigate('(tabs)');
           console.log('for some reason you were not verified...');
         }
       } else {
         setErrorMessage(data.error || 'Registration failed. Please try again.');
         console.error('Registration error:', data);
-        // Optionally, use Alert to display the error
         Alert.alert('Error', data.error || 'Registration failed. Please try again.');
       }
     } catch (error) {
@@ -164,13 +161,7 @@ export default function CreateAccountScreen() {
         value={password}
         onChangeText={setPassword}
       />
-      {/* <TextInput
-        style={styles.input}
-        placeholder="Confirm Password"
-        secureTextEntry={true}
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-      /> */}
+  
       <View>
           <Button label="Sign Up" targetScreen="loginUser"
           style={{ height: '80%', width: '100%'}} // Override button styles
@@ -274,7 +265,7 @@ const styles = StyleSheet.create({
   },
   successContainer: { // Style for success notification
     position: 'absolute',
-    top: 60, // Adjust as needed
+    top: 60, 
     left: 20,
     right: 20,
     backgroundColor: 'rgba(0, 34, 128, 0.7)', // Semi-transparent green
