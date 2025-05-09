@@ -48,9 +48,10 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
-  const fetchUserProfile = async (authToken: string) => {
+  const fetchUserProfile = async (authToken: string, userId: string) => {
     try {
-      const res = await fetch('https://neighborhood-safety-backend.vercel.app/api/users/login', {
+      const res = await fetch(`https://neighborhood-safety-backend.vercel.app/api/users/${userId}`, {
+
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
@@ -85,7 +86,7 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
         setToken(storedToken);
         setIsAuthenticated(true);
         setUser((prevUser) => ({ ...prevUser, userId: storedUserId })); // Temporarily set userId
-        await fetchUserProfile(storedToken); // Fetch full user profile
+        await fetchUserProfile(storedToken, storedUserId);
       }
       setIsLoading(false);
     })();
@@ -97,7 +98,7 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
     setToken(authToken);
     setIsAuthenticated(true);
     setUser((prevUser) => ({ ...prevUser, userId })); // Temporarily set userId
-    await fetchUserProfile(authToken); // Fetch full user profile
+    await fetchUserProfile(authToken, userId);
   }, []);
 
   const signOut = useCallback(async () => {
