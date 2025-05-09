@@ -60,18 +60,17 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
       if (!res.ok) throw new Error("Failed to fetch user profile");
 
       const data = await res.json();
+      console.log("User profile data:", data);
       setUser({
         userId: data._id,
-        username: data.username,
-        email: data.email,
         first_name: data.first_name,
         last_name: data.last_name,
+        username: data.username,
+        email: data.email,
         phone_number: data.phone_number,
         isModerator: data.isModerator,
         createdAt: new Date(data.createdAt),
       });
-
-      console.log("User profile fetched successfully:", data);
     } catch (err) {
       console.error("Error fetching user profile:", err);
       setUser(null);
@@ -79,18 +78,20 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
   };
 
   useEffect(() => {
-    (async () => {
-      const storedToken = await AsyncStorage.getItem('@token');
-      const storedUserId = await AsyncStorage.getItem('@userId'); // Retrieve userId
-      if (storedToken && storedUserId) {
-        setToken(storedToken);
-        setIsAuthenticated(true);
-        setUser((prevUser) => ({ ...prevUser, userId: storedUserId })); // Temporarily set userId
-        await fetchUserProfile(storedToken, storedUserId);
-      }
-      setIsLoading(false);
-    })();
-  }, []);
+  (async () => {
+    const storedToken = await AsyncStorage.getItem('@token');
+    const storedUserId = await AsyncStorage.getItem('@userId');
+    if (storedToken && storedUserId) {
+      setToken(storedToken);
+      setIsAuthenticated(true);
+      setUser((prevUser) => ({ ...prevUser, userId: storedUserId }));
+      await fetchUserProfile(storedToken, storedUserId);
+    } else {
+      setIsAuthenticated(false); // Ensure this is set to `false` when no token is found
+    }
+    setIsLoading(false); // Set loading to false when authentication check is done
+  })();
+}, []);
 
   const signIn = useCallback(async (authToken: string, userId: string) => {
     await AsyncStorage.setItem('@token', authToken);
@@ -99,6 +100,7 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
     setIsAuthenticated(true);
     setUser((prevUser) => ({ ...prevUser, userId })); // Temporarily set userId
     await fetchUserProfile(authToken, userId);
+    router.replace('/(authorized)/(drawer)/(tabs)/homepage')
   }, []);
 
   const signOut = useCallback(async () => {

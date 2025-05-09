@@ -13,6 +13,7 @@ export default function AccountScreen() {
 
   if (!fontsLoaded) return <Text>Loading...</Text>;
 
+  console.log(user);
   return (
     
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -32,6 +33,9 @@ export default function AccountScreen() {
             </Text>
             <Text style={styles.bodyText}>
               <Text style={styles.boldText}>Last Name:</Text> {user?.last_name ?? 'N/A'}
+            </Text>
+            <Text style={styles.bodyText}>
+              <Text style={styles.boldText}>Email:</Text> {user?.email ?? 'N/A'}
             </Text>
           </View>
 

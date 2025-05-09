@@ -7,6 +7,7 @@ import type {ElementRef} from 'react';
 import { useNavigation } from '@react-navigation/native';  
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';  // For proper typing
 import { RootStackParamList } from '../(authorized)/_layout'; 
+import { router } from 'expo-router';
 
 export default function LoginScreen() {
    const [username, setUsername] = useState('');
@@ -60,6 +61,10 @@ export default function LoginScreen() {
           signIn(data.token, data.userId); // Pass the token and userId to your AuthProvider
           setUsername('');
           setPassword('');
+          router.push('/(authorized)/(drawer)/(tabs)/homepage'); // Navigate to the homepage
+        }
+        else{
+          console.log('login.tsx: No token or userId in response:', data);
         }
       } else {
         setErrorMessage(data.error || 'Login failed');
