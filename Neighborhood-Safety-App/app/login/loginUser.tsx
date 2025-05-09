@@ -57,7 +57,7 @@ export default function LoginScreen() {
         console.log('login.tsx: user login successful:', data);
         if (data.token) {
           console.log('login.tsx: Calling signIn() with token:', data.token);
-          signIn(data.token); // Pass the token to your AuthProvider
+          await signIn(data.token); // Pass the token
           setUsername('');
           setPassword('');
         }
@@ -79,8 +79,6 @@ export default function LoginScreen() {
       setErrorMessage('Network error. Please check your connection and try again.');
       Alert.alert('Error', 'Network error. Please check your connection and try again.');
       console.error('User login network error:', error);
-    } finally{
-      setLoading(false);
     }
    };
    return (
