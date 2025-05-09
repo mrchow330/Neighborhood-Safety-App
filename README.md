@@ -21,23 +21,33 @@ This app uses the following technologies and libraries:
 - [React Navigation](https://reactnavigation.org/) (for navigation)
 - [Expo Router](https://expo.github.io/router/docs) (for file-based routing)
 - [Async Storage](https://react-native-async-storage.github.io/async-storage/docs/usage/) ( for storing data in local storage)
+- [Google Maps API](https://developers.google.com/maps/documentation) (for map integration and geolocation)
 
 ### Backend: 
 - [express](https://expressjs.com/) (for building the server and handling API routes)
 - [mongoose](https://mongoosejs.com/) (for connecting to and interacting with the MongoDB database)
 - [dotenv](https://www.npmjs.com/package/dotenv) (for managing environment variables securely)
 - [cors](https://www.npmjs.com/package/cors) (for enabling cross-origin resource sharing)
-
-### In the future:
-- Google Maps API.
-
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs) (for hashing passwords in the MongoDB database)
+- [node-fetch](https://www.npmjs.com/package/node-fetch) (used in Node.js environments to make HTTP requests)
+- [nodemon](https://www.npmjs.com/package/nodemon) (for automatically restarting the server during development when file changes are detected) (optional)
 
 ## Related Repositories
 
 ### ```neighborhood-safety-backend```
-The backend repository can be accessed [here](https://github.com/mrchow330/neighborhood-safety-backend).
+For more information about the backend repository, it can be accessed [here](https://github.com/mrchow330/neighborhood-safety-backend).
 
-## Set up/View on Local Machine
+## Features
+- **Straightforward Report Submission**: Allows user to easily submit report information such as description, type, etc.
+- **Image Upload**: Users can upload images for their reports, which are stored in Cloudinary.
+- **Public Reports Log**: Users can view other people's reports.
+- **Google Maps Integration**: Users can select a location on the map or use their current location for reporting issues.
+- **Report Submission**: Reports are submitted with geolocation, issue type, description, and optional image.
+- **Live Map**: Displays all submitted reports with markers and status-based color coding.
+- **User Authentication**: Login and sign-up functionality with backend integration.
+
+
+## Installation & Setup
 
 To set up and view the app on your local machine, follow these steps:
 ### Prerequisites
@@ -46,12 +56,13 @@ To set up and view the app on your local machine, follow these steps:
 - Install [Expo Go](https://expo.dev/go) on a physical device (if you wish to preview the app on mobile).
 - Install [MongoDB](https://www.mongodb.com/) and ensure it is running locally or use a cloud-hosted MongoDB instance.
 - Create a [Cloudinary](https://cloudinary.com/) account and set up an upload preset.
+- Obtain a [Google Maps API Key](https://developers.google.com/maps/documentation).
 
-### Steps:
+### Installation Steps:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/your-username/Neighborhood-Safety-App.git
+   git clone https://github.com/mrchow330/Neighborhood-Safety-App.git
    ```
 
 2. Navigate to the project directory:
@@ -70,6 +81,7 @@ To set up and view the app on your local machine, follow these steps:
      ```
      MONGO_URI=your-mongodb-connection-string
      CLOUDINARY_URL=your-cloudinary-upload-url
+     GOOGLE_MAPS_API_KEY=your-google-maps-api-key
      ```
 
 
@@ -87,7 +99,7 @@ To set up and view the app on your local machine, follow these steps:
 
 7. Open the app:
    - Scan the QR code in the terminal using the Expo Go app on your mobile device.
-   - Alternatively, open the app in a web browser or an emulator.
+   - Alternatively, open the app in a web browser (by pressing w) or through an emulator.
 
 
 ## Builds
@@ -134,7 +146,17 @@ When the build is completed, you will get a link to download the APK or AAB file
 - [Cloudinary Documentation](https://cloudinary.com/documentation)
 - [MongoDB Documentation](https://www.mongodb.com/docs/)
 - [Axios Documentation](https://axios-http.com/docs/intro)
+- [Google Maps API Documentation](https://developers.google.com/maps/documentation)
+
+## The Developers
+
+### Team Prodigies
+- Eric Chow (Senior Biochemistry Major in Bradley University)
+- Wardiyah Rammazy
+- Caleb Ribeiro
+- Mason Breidenbach
+- Cailer Kellenberger
 
 ---
 
-
+&copy;(not really) 2025 Team Prodigies

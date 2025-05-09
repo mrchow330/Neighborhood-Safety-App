@@ -1,63 +1,53 @@
-import {useAuthSession} from "@/providers/AuthProvider";
-import {useState} from "react";
-import {View, Text, StyleSheet, TouchableOpacity, ScrollView} from "react-native";
+// drawer/account.tsx
+
+import { useAuthSession } from "@/providers/AuthProvider";
+import { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { useFonts } from 'expo-font';
 import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
-
+import React from 'react';
 
 export default function AccountScreen() {
-  const {signOut, token} = useAuthSession()
-  const [tokenInUi, setTokenInUi] = useState<null|string|undefined>(null)
+  const { signOut, user } = useAuthSession();
+  const [fontsLoaded] = useFonts({ Nunito_400Regular, Nunito_700Bold });
 
-  const logout = () => {
-     signOut();
-  }
-
-  // const callApi = () => {
-  //   setTokenInUi(token?.current);
-  // }
-  const [fontsLoaded] = useFonts({
-    Nunito_400Regular,
-    Nunito_700Bold,
-  });
-
-  if (!fontsLoaded) {
-    return <Text>Loading...</Text>; // Show a loading state while fonts load
-  }
+  if (!fontsLoaded) return <Text>Loading...</Text>;
 
   return (
-    // <ScrollView>
-    //   <View style={styles.container} >
-    //     <TouchableOpacity style = {styles.logoutButton} onPress = {logout}>
-    //       <Text style={styles.logoutText}>Logout</Text>
-    //     </TouchableOpacity>
-        
-    //     {/* <Text>Make an API call with the stored AUTH token</Text>
-    //     <Button title={"Call API"} onPress={callApi} />
-    //     {tokenInUi &&
-    //       <Text>{`Your API access token is ${tokenInUi}`}</Text>
-    //     } */}
-    //   </View>
-    // </ScrollView>
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <Text style={styles.header}>Account</Text>
 
         <View style={styles.section}>
-          <TouchableOpacity style = {styles.logoutButton} onPress = {logout}>
+          <Text style={styles.sectionTitle}>User Info</Text>
+          <Text style={styles.bodyText}>
+            <Text style={styles.boldText}>Email:</Text> {user?.email ?? 'N/A'}
+          </Text>
+          <Text style={styles.bodyText}>
+            <Text style={styles.boldText}>Username:</Text> {user?.username ?? 'N/A'}
+          </Text>
+          <Text style={styles.bodyText}>
+            <Text style={styles.boldText}>First Name:</Text> {user?.firstName ?? 'N/A'}
+          </Text>
+          <Text style={styles.bodyText}>
+            <Text style={styles.boldText}>Last Name:</Text> {user?.lastName ?? 'N/A'}
+          </Text>
+        </View>
+
+        <View style={styles.section}>
+          <TouchableOpacity style={styles.logoutButton} onPress={signOut}>
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
-
   );
 }
 
 const styles = StyleSheet.create({
   text: {
     color: '#1E293B',
-    fontFamily: 'Nunito_400Regular'
+    fontFamily: 'Nunito_400Regular',
   },
   logoutButton: {
     marginTop: 24,
@@ -73,7 +63,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito_400Regular',
     fontSize: 18,
     fontWeight: 'bold',
-    textAlign : 'center',
+    textAlign: 'center',
   },
   scrollContainer: {
     padding: 20,
@@ -103,15 +93,15 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 20,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
-    display : 'flex',
+    display: 'flex',
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',
     color: '#1E293B',
-    marginBottom: 5,
+    marginBottom: 10,
     fontFamily: 'Nunito_400Regular',
   },
   bodyText: {
@@ -120,21 +110,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontFamily: 'Nunito_400Regular',
   },
-  boldText:{
+  boldText: {
     fontWeight: 'bold',
-    color: '#1e3a8a'
-  },
-  link: {
-    fontSize: 14,
-    color: '#2563EB',
-    textDecorationLine: 'underline',
-    marginBottom: 5,
-    fontFamily: 'Nunito_400Regular',
-  },
-  emergency: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#DC2626',
-    fontFamily: 'Nunito_400Regular',
+    color: '#1e3a8a',
   },
 });
