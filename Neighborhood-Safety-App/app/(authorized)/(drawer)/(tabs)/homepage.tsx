@@ -28,7 +28,7 @@ export default function Index() {
         transition={1000}
       />
 
-      <Text style={styles.header}>Welcome to {"\n"} HoodWatch (name WIP)</Text>
+      <Text style={styles.header}>Welcome to {"\n"} HoodWatch</Text>
       {/* <Link href='/about'>about</Link> */}
       <View>
         <Button label="Report an issue" targetScreen="reportIssue"/>
