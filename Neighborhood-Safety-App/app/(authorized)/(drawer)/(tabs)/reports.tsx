@@ -253,7 +253,11 @@ export default function ReportScreen() {
             {expandedIndex === index && (
               <View style={styles.expandedContainer}>
                 <Text style={styles.expandedLabel}>Location</Text>
-                <Text style={styles.expandedText}>{typeof report.location === 'string' ? report.location : report.location?.description || 'N/A'}</Text>
+                <Text style={styles.expandedText}>
+                  {report.location?.coordinates
+                    ? `Lat: ${report.location.coordinates[1]}, Lng: ${report.location.coordinates[0]}`
+                    : 'N/A'}
+                </Text>
                 {report.photoUri && (
                   <TouchableOpacity onPress={() => { setModalImageUri(report.photoUri); setModalVisible(true); }}>
                     <Image
