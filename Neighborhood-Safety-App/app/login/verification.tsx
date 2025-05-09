@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator} from 'react-native';
-import * as Linking from 'expo-linking';
 import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
@@ -18,59 +17,46 @@ const VerificationScreen = () => {
   const [message, setMessage] = useState('');
   const [isChecking, setIsChecking] = useState(true); // Initial loading state
 
-  useEffect(() => {
-    const handleOpenURL = (event: { url: string | null } | null) => {
-      setIsChecking(true); // check new URL
-      if (event?.url) {
-        const { path, queryParams } = Linking.parse(event.url);
+ useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
 
-        const receivedmessage = queryParams?.message;
-        const error = queryParams?.error;
-
-        const getFirstQueryParam = (param: string | string[] | undefined): string | undefined => {
-          if (Array.isArray(param)) {
-            return param[0];
-          }
-          return param;
-        };
-
-        if (path === 'email-verified') {
-          const successMessage = getFirstQueryParam(receivedmessage) || 'Email verified successfully! Redirecting to home...';
-          setVerificationStatus(true);
-          setMessage(successMessage);
-          // After a short delay, navigate to home
-          setTimeout(() => {
-            navigation.navigate('loginUser'); 
-          }, 15000);
-        } else if (path === 'email-verification-failed') {
-          const errorMessage = getFirstQueryParam(error) || 'Email verification failed.';
-          setVerificationStatus(false);
-          setMessage(errorMessage);
+    if (token) {
+      setIsChecking(true);
+      setMessage('Verifying...');
+      //https://neighborhood-safety-backend-wardiyahs-projects.vercel.app/auth/verify-email
+      //http://localhost:3000/api/users
+      fetch('https://neighborhood-safety-backend.vercel.app/api/auth/verify-email?token=' + token, { 
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
           setIsChecking(false);
-        } else {
-          setMessage('Checking verification status');
-          setIsChecking(false); // Not a verification link
-        }
-      } else {
-        setMessage('No verification link was found.');
-        setIsChecking(false); // No URL
-      }
-    };
-
-    // Get the initial URL when the app starts
-    Linking.getInitialURL().then((url) => {
-      if (url) {
-        handleOpenURL({ url });
-      } else {
-        setMessage('Waiting for verification link...');
-        setIsChecking(false); // No initial URL
-      }
-    });
-
-    // Listen for subsequent URL events
-    const subscription = Linking.addEventListener('url', handleOpenURL);
-    return () => subscription.remove();
+          if (data.message === 'Email verified successfully!') {
+            setVerificationStatus(true);
+            setMessage(data.message);
+            setTimeout(() => {
+              navigation.navigate('loginUser'); 
+            }, 2000);
+          } else {
+            setVerificationStatus(false);
+            setMessage(data.error || 'Email verification failed.');
+          }
+        })
+        .catch(error => {
+          setIsChecking(false);
+          setVerificationStatus(false);
+          setMessage('Network error during verification.');
+        });
+    } else {
+      setIsChecking(false);
+      setMessage('Please check your email and click the verification link.');
+    }
   }, [navigation]);
+
   let content;
   if (isChecking) {
     content = (
@@ -93,7 +79,6 @@ const VerificationScreen = () => {
         <Text style={styles.title}>Verification Failed</Text>
         <Text style={styles.messageText}>{message}</Text>
         <Text style={styles.infoText}>Please try again or request a new link.</Text>
-        {/* Future: Add Resend Email Button here */}
       </View>
     );
   } else {
@@ -102,10 +87,10 @@ const VerificationScreen = () => {
         <Text style={styles.title}>Verify Your Email</Text>
         <Text style={styles.messageText}>Please check your email <Text style={styles.boldText}>(including your spam!)</Text> and click the verification link we've sent.</Text>
         <Text style={styles.infoText}>You will be redirected to the login page shortly.</Text>
-        {/* Future: Add Resend Email Button here */}
       </View>
     );
   }
+
   return (
     <View style={styles.container}>
       <Image
