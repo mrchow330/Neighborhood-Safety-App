@@ -73,7 +73,7 @@ export default function CreateAccountScreen() {
 
     //https://neighborhood-safety-backend.vercel.app/api/users
     try {
-      const response = await fetch('http://localhost:3000/api/users', {
+      const response = await fetch('https://neighborhood-safety-backend.vercel.app/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
